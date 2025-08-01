@@ -38,7 +38,6 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
     formState: { errors },
   } = useForm<OilEntryFormData>({
     defaultValues: {
-      date: new Date().toISOString().split('T')[0], // Today's date
       type: 'consumption',
     }
   });
@@ -66,7 +65,24 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
   const onSubmit = async (data: OilEntryFormData) => {
     try {
       setIsSubmitting(true);
-      await dataAPI.create(data);
+      
+      // Automatically set current date and time in Albanian timezone
+      const now = new Date();
+      const albanianDate = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Tirane' }); // YYYY-MM-DD format
+      const albanianTime = now.toLocaleTimeString('en-US', { 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZone: 'Europe/Tirane'
+      });
+      
+      const dateTimeString = `${albanianDate}T${albanianTime}:00`;
+      const submissionData = {
+        ...data,
+        date: dateTimeString
+      };
+      
+      await dataAPI.create(submissionData);
       toast.success('Oil entry added successfully!');
       reset();
       onSuccess();
@@ -146,23 +162,7 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
               )}
             </div>
 
-            {/* Date */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Date *
-              </label>
-              <input
-                type="date"
-                min={new Date().toISOString().split('T')[0]}
-                {...register('date', {
-                  required: 'Date is required',
-                })}
-                className="input"
-              />
-              {errors.date && (
-                <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
-              )}
-            </div>
+
 
             {/* Litres */}
             <div>

@@ -225,6 +225,7 @@ const MachineryPage: React.FC = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSuccess={handleAddSuccess}
+        existingMachinery={machinery}
       />
 
       {/* Edit Machinery Modal */}
@@ -233,6 +234,7 @@ const MachineryPage: React.FC = () => {
         onClose={() => setIsEditModalOpen(false)}
         onSuccess={handleEditSuccess}
         machinery={selectedMachinery}
+        existingMachinery={machinery}
       />
 
       {/* Delete Machinery Modal */}

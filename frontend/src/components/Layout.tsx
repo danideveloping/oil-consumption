@@ -13,6 +13,7 @@ import {
   Fuel
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useFilter } from '../contexts/FilterContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -25,23 +26,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
+    { name: 'Year/Month Data', href: '/year-month-data', icon: Calendar },
     { name: 'Machinery', href: '/machinery', icon: Settings },
     { name: 'Places', href: '/places', icon: MapPin },
-    ...(isSuperAdmin() ? [{ name: 'Data & Reports', href: '/data', icon: BarChart3 }] : []),
+    ...(isSuperAdmin() ? [
+      { name: 'Data & Reports', href: '/data', icon: BarChart3 }
+    ] : []),
   ];
 
-  const currentMonth = new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long' 
-  });
 
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const currentYear = new Date().getFullYear();
-  const years = [currentYear - 1, currentYear, currentYear + 1];
 
   const isCurrentPath = (path: string) => {
     return location.pathname === path;
@@ -129,46 +122,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           })}
         </nav>
 
-        {/* Months Section */}
-        <div className="px-4 mt-6">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-            Current Period
-          </h3>
-          <div className="space-y-2">
-            <div className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-50 rounded-md">
-              <Calendar className="mr-3 h-4 w-4 text-gray-400" />
-              {currentMonth}
-            </div>
-          </div>
-          
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">
-            Available Years
-          </h4>
-          <div className="space-y-1">
-            {years.map((year) => (
-              <div key={year} className="text-sm text-gray-600 px-3 py-1 hover:bg-gray-50 rounded">
-                {year}
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Recent Months */}
-        <div className="px-4 mt-4">
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-            Quick Access
-          </h4>
-          <div className="space-y-1">
-            {months.slice(new Date().getMonth() - 2, new Date().getMonth() + 3).map((month) => (
-              <button
-                key={month}
-                className="w-full text-left text-sm text-gray-600 px-3 py-1 hover:bg-gray-50 rounded transition-colors"
-              >
-                {month}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Logout button */}
         <div className="px-4 pb-4">

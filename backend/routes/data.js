@@ -6,9 +6,9 @@ const { authenticateToken } = require('../middleware/auth');
 const router = express.Router();
 
 // Helper function to add role-based date filtering
-const addRoleBasedDateFiltering = (user, query, params, paramCount) => {
-  // If user is not superadmin, restrict to current month only
-  if (user.role !== 'superadmin') {
+const addRoleBasedDateFiltering = (user, query, params, paramCount, hasYearFilter = false) => {
+  // If user is not superadmin and no year filter is provided, restrict to current month only
+  if (user.role !== 'superadmin' && !hasYearFilter) {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
@@ -35,7 +35,9 @@ router.get('/', authenticateToken, async (req, res) => {
       machinery_id, 
       start_date, 
       end_date, 
-      type 
+      type,
+      year,
+      month
     } = req.query;
     
     const offset = (page - 1) * limit;
@@ -49,7 +51,7 @@ router.get('/', authenticateToken, async (req, res) => {
       WHERE 1=1
     `;
     
-    const params = [];
+    let params = [];
     let paramCount = 0;
     
     if (machinery_id) {
@@ -76,8 +78,19 @@ router.get('/', authenticateToken, async (req, res) => {
       params.push(type);
     }
     
+    // Add year and month filtering
+    if (year && month) {
+      paramCount++;
+      query += ` AND TO_CHAR(od.date, 'YYYY-MM') = $${paramCount}`;
+      params.push(`${year}-${month.padStart(2, '0')}`);
+    } else if (year) {
+      paramCount++;
+      query += ` AND EXTRACT(YEAR FROM od.date) = $${paramCount}`;
+      params.push(year);
+    }
+    
     // Apply role-based date filtering
-    const filtered = addRoleBasedDateFiltering(req.user, query, params, paramCount);
+    const filtered = addRoleBasedDateFiltering(req.user, query, params, paramCount, !!(year || month));
     query = filtered.query;
     params = filtered.params;
     paramCount = filtered.paramCount;
@@ -100,7 +113,7 @@ router.get('/', authenticateToken, async (req, res) => {
       WHERE 1=1
     `;
     
-    const countParams = [];
+    let countParams = [];
     let countParamCount = 0;
     
     if (machinery_id) {
@@ -127,8 +140,19 @@ router.get('/', authenticateToken, async (req, res) => {
       countParams.push(type);
     }
     
+    // Add year and month filtering for count
+    if (year && month) {
+      countParamCount++;
+      countQuery += ` AND TO_CHAR(od.date, 'YYYY-MM') = $${countParamCount}`;
+      countParams.push(`${year}-${month.padStart(2, '0')}`);
+    } else if (year) {
+      countParamCount++;
+      countQuery += ` AND EXTRACT(YEAR FROM od.date) = $${countParamCount}`;
+      countParams.push(year);
+    }
+    
     // Apply role-based date filtering to count query
-    const countFiltered = addRoleBasedDateFiltering(req.user, countQuery, countParams, countParamCount);
+    const countFiltered = addRoleBasedDateFiltering(req.user, countQuery, countParams, countParamCount, !!(year || month));
     countQuery = countFiltered.query;
     countParams = countFiltered.params;
     
@@ -170,7 +194,7 @@ router.get('/daily', authenticateToken, async (req, res) => {
       WHERE 1=1
     `;
     
-    const params = [];
+    let params = [];
     let paramCount = 0;
     
     if (date) {
@@ -222,7 +246,7 @@ router.get('/monthly', authenticateToken, async (req, res) => {
       WHERE 1=1
     `;
     
-    const params = [];
+    let params = [];
     let paramCount = 0;
     
     if (year && month) {
@@ -260,7 +284,7 @@ router.get('/monthly', authenticateToken, async (req, res) => {
 router.post('/', [
   authenticateToken,
   body('machinery_id').isInt({ min: 1 }).withMessage('Valid machinery ID is required'),
-  body('date').isISO8601().withMessage('Valid date is required (YYYY-MM-DD)'),
+  body('date').isISO8601().withMessage('Valid date and time is required (YYYY-MM-DDTHH:mm:ss)'),
   body('litres').isFloat({ min: 0 }).withMessage('Litres must be a positive number'),
   body('type').optional().isIn(['consumption', 'refill', 'maintenance']).withMessage('Type must be consumption, refill, or maintenance')
 ], async (req, res) => {
@@ -307,7 +331,7 @@ router.post('/', [
 router.put('/:id', [
   authenticateToken,
   body('machinery_id').optional().isInt({ min: 1 }).withMessage('Valid machinery ID is required'),
-  body('date').optional().isISO8601().withMessage('Valid date is required (YYYY-MM-DD)'),
+  body('date').optional().isISO8601().withMessage('Valid date and time is required (YYYY-MM-DDTHH:mm:ss)'),
   body('litres').optional().isFloat({ min: 0 }).withMessage('Litres must be a positive number'),
   body('type').optional().isIn(['consumption', 'refill', 'maintenance']).withMessage('Type must be consumption, refill, or maintenance')
 ], async (req, res) => {

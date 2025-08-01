@@ -16,6 +16,7 @@ const DataPage: React.FC = () => {
   const [realMonthlyData, setRealMonthlyData] = useState<any[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [isMonthSelectorOpen, setIsMonthSelectorOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   // Close month selector when clicking outside
   useEffect(() => {
@@ -34,6 +35,11 @@ const DataPage: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMonthSelectorOpen]);
+
+  // Load data when component mounts or when selected date changes
+  useEffect(() => {
+    loadData();
+  }, [selectedDate, activeTab]);
 
   // Mock daily data
   const dailyData = [
@@ -129,7 +135,17 @@ const DataPage: React.FC = () => {
       setIsLoading(true);
       if (activeTab === 'daily') {
         const response = await dataAPI.getAll();
-        setRealDailyData(response.data.data || []);
+        let data = response.data.data || [];
+        
+        // Filter by selected date if specified
+        if (selectedDate) {
+          data = data.filter(item => {
+            const itemDate = new Date(item.date).toISOString().split('T')[0];
+            return itemDate === selectedDate;
+          });
+        }
+        
+        setRealDailyData(data);
       } else {
         const response = await dataAPI.getMonthly();
         setRealMonthlyData(response.data || []);
@@ -150,13 +166,27 @@ const DataPage: React.FC = () => {
   const currentDailyData = realDailyData.length > 0 ? realDailyData : dailyData;
   const currentMonthlyData = realMonthlyData.length > 0 ? realMonthlyData : monthlyData;
 
-  const totalConsumption = currentDailyData
-    .filter(d => d.type === 'consumption')
-    .reduce((sum, d) => sum + d.litres, 0);
+  // Filter data by selected date if specified
+  const filteredDailyData = selectedDate 
+    ? currentDailyData.filter(item => {
+        const itemDate = new Date(item.date).toISOString().split('T')[0];
+        return itemDate === selectedDate;
+      })
+    : currentDailyData;
 
-  const totalRefills = currentDailyData
+  const totalConsumption = filteredDailyData
+    .filter(d => d.type === 'consumption')
+    .reduce((sum, d) => {
+      const litres = typeof d.litres === 'number' ? d.litres : parseFloat(d.litres) || 0;
+      return sum + litres;
+    }, 0);
+
+  const totalRefills = filteredDailyData
     .filter(d => d.type === 'refill')
-    .reduce((sum, d) => sum + d.litres, 0);
+    .reduce((sum, d) => {
+      const litres = typeof d.litres === 'number' ? d.litres : parseFloat(d.litres) || 0;
+      return sum + litres;
+    }, 0);
 
   return (
     <div className="space-y-6">
@@ -275,7 +305,7 @@ const DataPage: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Today's Consumption</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalConsumption}L</p>
+                  <p className="text-2xl font-bold text-gray-900">{(totalConsumption || 0).toFixed(0)}L</p>
                 </div>
               </div>
             </div>
@@ -287,7 +317,7 @@ const DataPage: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Today's Refills</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalRefills}L</p>
+                  <p className="text-2xl font-bold text-gray-900">{(totalRefills || 0).toFixed(0)}L</p>
                 </div>
               </div>
             </div>
@@ -299,7 +329,7 @@ const DataPage: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Entries</p>
-                  <p className="text-2xl font-bold text-gray-900">{currentDailyData.length}</p>
+                  <p className="text-2xl font-bold text-gray-900">{filteredDailyData.length}</p>
                 </div>
               </div>
             </div>
@@ -352,15 +382,21 @@ const DataPage: React.FC = () => {
               )}
               
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                <button className="btn btn-secondary flex items-center justify-center w-full sm:w-auto">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </button>
                 <input
                   type="date"
                   className="input w-full sm:w-auto"
-                  defaultValue="2024-01-15"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  placeholder="Select date"
                 />
+                {selectedDate && (
+                  <button 
+                    onClick={() => setSelectedDate('')}
+                    className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
+                  >
+                    Clear Filter
+                  </button>
+                )}
               </div>
             </div>
 
@@ -386,7 +422,7 @@ const DataPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentDailyData.map((item) => (
+                      {filteredDailyData.map((item) => (
                         <tr key={item.id}>
                           <td className="font-medium text-xs sm:text-sm">{item.date}</td>
                           <td>

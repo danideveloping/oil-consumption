@@ -8,6 +8,7 @@ interface AddMachineryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  existingMachinery?: any[]; // Add this prop to check for duplicates
 }
 
 interface MachineryFormData {
@@ -18,7 +19,7 @@ interface MachineryFormData {
   description?: string;
 }
 
-const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, onSuccess }) => {
+const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, onSuccess, existingMachinery = [] }) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loadingPlaces, setLoadingPlaces] = useState(false);
 
@@ -59,6 +60,18 @@ const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, 
         capacity: data.capacity ? parseFloat(data.capacity) : null,
         description: data.description || null
       };
+
+      // Check for duplicate machinery at the same location
+      const selectedPlace = places.find(place => place.id === cleanData.place_id);
+      const isDuplicate = existingMachinery.some(machinery => 
+        machinery.name.toLowerCase() === cleanData.name.toLowerCase() && 
+        machinery.place_id === cleanData.place_id
+      );
+
+      if (isDuplicate) {
+        toast.error(`A machinery with the name "${cleanData.name}" already exists at "${selectedPlace?.name}". Please choose a different name or location.`);
+        return;
+      }
 
       console.log('Submitting machinery data:', cleanData);
       console.log('Data being sent to API:', JSON.stringify(cleanData, null, 2));

@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import MachineryPage from './pages/MachineryPage';
 import PlacesPage from './pages/PlacesPage';
 import DataPage from './pages/DataPage';
+import YearMonthDataPage from './pages/YearMonthDataPage';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Protected Route component
@@ -73,6 +74,7 @@ function App() {
                       </SuperAdminRoute>
                     } 
                   />
+                  <Route path="/year-month-data" element={<YearMonthDataPage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Layout>

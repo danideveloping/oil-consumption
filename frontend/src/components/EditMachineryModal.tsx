@@ -9,6 +9,7 @@ interface EditMachineryModalProps {
   onClose: () => void;
   onSuccess: () => void;
   machinery: Machinery | null;
+  existingMachinery?: any[]; // Add this prop to check for duplicates
 }
 
 interface MachineryFormData {
@@ -23,7 +24,8 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
   isOpen, 
   onClose, 
   onSuccess, 
-  machinery 
+  machinery,
+  existingMachinery = []
 }) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loadingPlaces, setLoadingPlaces] = useState(false);
@@ -79,6 +81,19 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
         capacity: data.capacity || null,
         description: data.description || null
       };
+
+      // Check for duplicate machinery at the same location (excluding current machinery)
+      const selectedPlace = places.find(place => place.id === cleanData.place_id);
+      const isDuplicate = existingMachinery.some(existingMachinery => 
+        existingMachinery.id !== machinery.id && // Exclude current machinery being edited
+        existingMachinery.name.toLowerCase() === cleanData.name.toLowerCase() && 
+        existingMachinery.place_id === cleanData.place_id
+      );
+
+      if (isDuplicate) {
+        toast.error(`A machinery with the name "${cleanData.name}" already exists at "${selectedPlace?.name}". Please choose a different name or location.`);
+        return;
+      }
 
       await machineryAPI.update(machinery.id, cleanData);
       toast.success('Machinery updated successfully!');

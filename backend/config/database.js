@@ -63,7 +63,7 @@ class Database {
         `CREATE TABLE IF NOT EXISTS oil_data (
           id SERIAL PRIMARY KEY,
           machinery_id INTEGER NOT NULL REFERENCES machinery(id),
-          date DATE NOT NULL,
+          date TIMESTAMP NOT NULL,
           litres DECIMAL(10,2) NOT NULL,
           type VARCHAR(50) DEFAULT 'consumption',
           notes TEXT,
