@@ -16,7 +16,7 @@ async function testMachineryCreation() {
     console.log('Sending data:', testData);
     
     // Make request to the API
-    const response = await axios.post('http://localhost:5000/api/machinery', testData, {
+    const response = await axios.post('http://localhost:5000/oil/api/machinery', testData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer YOUR_TOKEN_HERE' // You'll need to replace this with a real token

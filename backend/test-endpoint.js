@@ -5,7 +5,7 @@ async function testEndpoint() {
     console.log('🧪 Testing machinery endpoint...');
     
     // Test GET endpoint (should work without auth)
-    const response = await axios.get('http://localhost:5000/api/machinery');
+    const response = await axios.get('http://localhost:5000/oil/api/machinery');
     console.log('✅ GET endpoint works! Response:', response.data);
     
   } catch (error) {

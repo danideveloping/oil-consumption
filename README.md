@@ -122,7 +122,7 @@ A comprehensive web application for managing oil tanks, machinery, and consumpti
 
 7. **Access the Application**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000/api
+   - Backend API: http://localhost:5000/oil/api
 
 ## Usage
 
@@ -153,28 +153,28 @@ A comprehensive web application for managing oil tanks, machinery, and consumpti
 ### API Endpoints
 
 #### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
+- `POST /oil/api/auth/login` - User login
+- `POST /oil/api/auth/register` - User registration
 
 #### Places
-- `GET /api/places` - Get all places
-- `POST /api/places` - Create new place
-- `PUT /api/places/:id` - Update place
-- `DELETE /api/places/:id` - Delete place
+- `GET /oil/api/places` - Get all places
+- `POST /oil/api/places` - Create new place
+- `PUT /oil/api/places/:id` - Update place
+- `DELETE /oil/api/places/:id` - Delete place
 
 #### Machinery
-- `GET /api/machinery` - Get all machinery
-- `POST /api/machinery` - Create new machinery
-- `PUT /api/machinery/:id` - Update machinery
-- `DELETE /api/machinery/:id` - Delete machinery
+- `GET /oil/api/machinery` - Get all machinery
+- `POST /oil/api/machinery` - Create new machinery
+- `PUT /oil/api/machinery/:id` - Update machinery
+- `DELETE /oil/api/machinery/:id` - Delete machinery
 
 #### Oil Data
-- `GET /api/data` - Get oil consumption data (with pagination)
-- `GET /api/data/daily` - Get daily summaries
-- `GET /api/data/monthly` - Get monthly summaries
-- `POST /api/data` - Create new oil data entry
-- `PUT /api/data/:id` - Update oil data entry
-- `DELETE /api/data/:id` - Delete oil data entry
+- `GET /oil/api/data` - Get oil consumption data (with pagination)
+- `GET /oil/api/data/daily` - Get daily summaries
+- `GET /oil/api/data/monthly` - Get monthly summaries
+- `POST /oil/api/data` - Create new oil data entry
+- `PUT /oil/api/data/:id` - Update oil data entry
+- `DELETE /oil/api/data/:id` - Delete oil data entry
 
 ## Database Schema
 

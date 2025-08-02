@@ -18,13 +18,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/machinery', machineryRoutes);
-app.use('/api/data', dataRoutes);
-app.use('/api/places', placesRoutes);
+app.use('/oil/api/auth', authRoutes);
+app.use('/oil/api/machinery', machineryRoutes);
+app.use('/oil/api/data', dataRoutes);
+app.use('/oil/api/places', placesRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/oil/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Oil Tank Management API is running' });
 });
 
