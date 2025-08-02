@@ -9,30 +9,7 @@ const PlacesPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Mock data - in a real app, this would come from API calls
-  const mockPlaces = [
-    {
-      id: 1,
-      name: 'Construction Site A',
-      location: 'Downtown District',
-      description: 'Main construction site for new building project',
-      machinery_count: 4
-    },
-    {
-      id: 2,
-      name: 'Warehouse B',
-      location: 'Industrial Zone',
-      description: 'Storage facility with backup generators',
-      machinery_count: 2
-    },
-    {
-      id: 3,
-      name: 'Port Terminal',
-      location: 'Harbor Area',
-      description: 'Cargo handling terminal with heavy equipment',
-      machinery_count: 6
-    }
-  ];
+
 
   // Load places data
   useEffect(() => {
@@ -43,10 +20,10 @@ const PlacesPage: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await placesAPI.getAll();
-      setPlaces(response.data || mockPlaces);
+      setPlaces(response.data || []);
     } catch (error) {
       console.error('Error loading places:', error);
-      setPlaces(mockPlaces); // Fallback to mock data
+      setPlaces([]); // Empty array if no data
     } finally {
       setIsLoading(false);
     }

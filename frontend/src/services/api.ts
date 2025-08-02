@@ -163,6 +163,8 @@ export const dataAPI = {
     start_date?: string;
     end_date?: string;
     type?: string;
+    year?: string;
+    month?: string;
   }) => api.get<PaginatedResponse<OilData>>('/data', { params }),
   
   getDaily: (params?: {
@@ -183,6 +185,16 @@ export const dataAPI = {
     api.put<OilData>(`/data/${id}`, data),
   
   delete: (id: number) => api.delete(`/data/${id}`),
+  
+  getTankAnalysis: (machineryId: number, params?: {
+    start_date?: string;
+    end_date?: string;
+  }) => api.get(`/data/tank-analysis/${machineryId}`, { params }),
+  
+  getCentralTankAnalysis: (params?: {
+    start_date?: string;
+    end_date?: string;
+  }) => api.get('/data/central-tank-analysis', { params }),
 };
 
 export default api; 

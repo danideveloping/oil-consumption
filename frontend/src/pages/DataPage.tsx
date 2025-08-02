@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Calendar, BarChart3, Fuel, Filter, Download, ChevronDown } from 'lucide-react';
+import { Plus, Calendar, BarChart3, Fuel, Filter, Download, ChevronDown, FileText, FileSpreadsheet, Settings } from 'lucide-react';
 import AddOilEntryModal from '../components/AddOilEntryModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PastMonthsData from '../components/PastMonthsData';
+import TankAnalysisModal from '../components/TankAnalysisModal';
+import CentralTankAnalysisModal from '../components/CentralTankAnalysisModal';
 import { dataAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
@@ -17,6 +19,9 @@ const DataPage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [isMonthSelectorOpen, setIsMonthSelectorOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
+  const [isTankAnalysisOpen, setIsTankAnalysisOpen] = useState(false);
+  const [isCentralTankAnalysisOpen, setIsCentralTankAnalysisOpen] = useState(false);
 
   // Close month selector when clicking outside
   useEffect(() => {
@@ -25,92 +30,26 @@ const DataPage: React.FC = () => {
       if (!target.closest('.month-selector')) {
         setIsMonthSelectorOpen(false);
       }
+      if (!target.closest('.export-dropdown')) {
+        setIsExportDropdownOpen(false);
+      }
     };
 
-    if (isMonthSelectorOpen) {
+    if (isMonthSelectorOpen || isExportDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMonthSelectorOpen]);
+  }, [isMonthSelectorOpen, isExportDropdownOpen]);
 
   // Load data when component mounts or when selected date changes
   useEffect(() => {
     loadData();
   }, [selectedDate, activeTab]);
 
-  // Mock daily data
-  const dailyData = [
-    {
-      id: 1,
-      date: '2024-01-15',
-      machinery_name: 'Excavator #3',
-      machinery_type: 'Heavy Equipment',
-      place_name: 'Construction Site A',
-      litres: 45,
-      type: 'consumption'
-    },
-    {
-      id: 2,
-      date: '2024-01-15',
-      machinery_name: 'Generator #1',
-      machinery_type: 'Power Generation',
-      place_name: 'Warehouse B',
-      litres: 25,
-      type: 'consumption'
-    },
-    {
-      id: 3,
-      date: '2024-01-14',
-      machinery_name: 'Crane #2',
-      machinery_type: 'Lifting Equipment',
-      place_name: 'Port Terminal',
-      litres: 120,
-      type: 'refill'
-    },
-    {
-      id: 4,
-      date: '2024-01-14',
-      machinery_name: 'Excavator #3',
-      machinery_type: 'Heavy Equipment',
-      place_name: 'Construction Site A',
-      litres: 15,
-      type: 'maintenance'
-    }
-  ];
 
-  // Mock monthly data
-  const monthlyData = [
-    {
-      month: '2024-01',
-      machinery_name: 'Excavator #3',
-      machinery_type: 'Heavy Equipment',
-      place_name: 'Construction Site A',
-      total_litres: 1250,
-      avg_daily_litres: 40.3,
-      record_count: 31
-    },
-    {
-      month: '2024-01',
-      machinery_name: 'Generator #1',
-      machinery_type: 'Power Generation',
-      place_name: 'Warehouse B',
-      total_litres: 780,
-      avg_daily_litres: 25.2,
-      record_count: 31
-    },
-    {
-      month: '2024-01',
-      machinery_name: 'Crane #2',
-      machinery_type: 'Lifting Equipment',
-      place_name: 'Port Terminal',
-      total_litres: 1680,
-      avg_daily_litres: 54.2,
-      record_count: 31
-    }
-  ];
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -135,16 +74,7 @@ const DataPage: React.FC = () => {
       setIsLoading(true);
       if (activeTab === 'daily') {
         const response = await dataAPI.getAll();
-        let data = response.data.data || [];
-        
-        // Filter by selected date if specified
-        if (selectedDate) {
-          data = data.filter(item => {
-            const itemDate = new Date(item.date).toISOString().split('T')[0];
-            return itemDate === selectedDate;
-          });
-        }
-        
+        const data = response.data.data || [];
         setRealDailyData(data);
       } else {
         const response = await dataAPI.getMonthly();
@@ -162,9 +92,9 @@ const DataPage: React.FC = () => {
     loadData(); // Refresh data after adding new entry
   };
 
-  // Use real data or fall back to mock data
-  const currentDailyData = realDailyData.length > 0 ? realDailyData : dailyData;
-  const currentMonthlyData = realMonthlyData.length > 0 ? realMonthlyData : monthlyData;
+  // Use real data only
+  const currentDailyData = realDailyData;
+  const currentMonthlyData = realMonthlyData;
 
   // Filter data by selected date if specified
   const filteredDailyData = selectedDate 
@@ -174,6 +104,7 @@ const DataPage: React.FC = () => {
       })
     : currentDailyData;
 
+  // Calculate totals for the filtered data
   const totalConsumption = filteredDailyData
     .filter(d => d.type === 'consumption')
     .reduce((sum, d) => {
@@ -187,6 +118,134 @@ const DataPage: React.FC = () => {
       const litres = typeof d.litres === 'number' ? d.litres : parseFloat(d.litres) || 0;
       return sum + litres;
     }, 0);
+
+  // Get the appropriate label based on whether a date is selected
+  const getConsumptionLabel = () => {
+    if (selectedDate) {
+      return `Selected Date Consumption`;
+    }
+    return `Current Period Consumption`;
+  };
+
+  const getRefillsLabel = () => {
+    if (selectedDate) {
+      return `Selected Date Refills`;
+    }
+    return `Current Period Refills`;
+  };
+
+  // Export functions
+  const formatDateForExport = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'});
+  };
+
+  const exportToCSV = () => {
+    const dataToExport = activeTab === 'daily' ? filteredDailyData : currentMonthlyData;
+    
+    if (dataToExport.length === 0) {
+      toast.error('No data to export');
+      return;
+    }
+
+    let csvContent = '';
+    
+    if (activeTab === 'daily') {
+      // Daily data CSV
+      csvContent = 'Date,Machinery,Machinery Type,Place,Litres,Entry Type\n';
+      dataToExport.forEach(item => {
+        const date = formatDateForExport(item.date);
+        const machinery = item.machinery_name || '';
+        const machineryType = item.machinery_type || '';
+        const place = item.place_name || '';
+        const litres = item.litres || 0;
+        const type = item.type || '';
+        
+        csvContent += `"${date}","${machinery}","${machineryType}","${place}","${litres}","${type}"\n`;
+      });
+    } else {
+      // Monthly data CSV
+      csvContent = 'Month,Machinery,Machinery Type,Place,Total Litres,Daily Average,Records\n';
+      dataToExport.forEach(item => {
+        const month = item.month || '';
+        const machinery = item.machinery_name || '';
+        const machineryType = item.machinery_type || '';
+        const place = item.place_name || '';
+        const totalLitres = item.total_litres || 0;
+        const avgDaily = item.avg_daily_litres || 0;
+        const records = item.record_count || 0;
+        
+        csvContent += `"${month}","${machinery}","${machineryType}","${place}","${totalLitres}","${avgDaily}","${records}"\n`;
+      });
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `oil_data_${activeTab}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('CSV exported successfully');
+    setIsExportDropdownOpen(false);
+  };
+
+  const exportToExcel = () => {
+    const dataToExport = activeTab === 'daily' ? filteredDailyData : currentMonthlyData;
+    
+    if (dataToExport.length === 0) {
+      toast.error('No data to export');
+      return;
+    }
+
+    // For Excel, we'll create a CSV with Excel-compatible formatting
+    let excelContent = '';
+    
+    if (activeTab === 'daily') {
+      // Daily data Excel
+      excelContent = 'Date\tMachinery\tMachinery Type\tPlace\tLitres\tEntry Type\n';
+      dataToExport.forEach(item => {
+        const date = formatDateForExport(item.date);
+        const machinery = item.machinery_name || '';
+        const machineryType = item.machinery_type || '';
+        const place = item.place_name || '';
+        const litres = item.litres || 0;
+        const type = item.type || '';
+        
+        excelContent += `${date}\t${machinery}\t${machineryType}\t${place}\t${litres}\t${type}\n`;
+      });
+    } else {
+      // Monthly data Excel
+      excelContent = 'Month\tMachinery\tMachinery Type\tPlace\tTotal Litres\tDaily Average\tRecords\n';
+      dataToExport.forEach(item => {
+        const month = item.month || '';
+        const machinery = item.machinery_name || '';
+        const machineryType = item.machinery_type || '';
+        const place = item.place_name || '';
+        const totalLitres = item.total_litres || 0;
+        const avgDaily = item.avg_daily_litres || 0;
+        const records = item.record_count || 0;
+        
+        excelContent += `${month}\t${machinery}\t${machineryType}\t${place}\t${totalLitres}\t${avgDaily}\t${records}\n`;
+      });
+    }
+
+    const blob = new Blob([excelContent], { type: 'text/tab-separated-values;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `oil_data_${activeTab}_${new Date().toISOString().split('T')[0]}.xls`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('Excel file exported successfully');
+    setIsExportDropdownOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -204,10 +263,57 @@ const DataPage: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-          <button className="btn btn-secondary flex items-center justify-center w-full sm:w-auto">
-            <Download className="h-4 w-4 mr-2" />
-            Export
+          {/* Central Tank Analysis Button */}
+          <button 
+            onClick={() => setIsCentralTankAnalysisOpen(true)}
+            className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Central Tank
           </button>
+          
+          {/* Individual Tank Analysis Button */}
+          <button 
+            onClick={() => setIsTankAnalysisOpen(true)}
+            className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
+          >
+            <Fuel className="h-4 w-4 mr-2" />
+            Individual Tanks
+          </button>
+          
+          {/* Export Dropdown */}
+          <div className="relative export-dropdown">
+            <button
+              onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
+              className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+              <ChevronDown className="h-4 w-4 ml-2" />
+            </button>
+            
+            {isExportDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="py-1">
+                  <button
+                    onClick={exportToCSV}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export as CSV
+                  </button>
+                  <button
+                    onClick={exportToExcel}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <FileSpreadsheet className="h-4 w-4 mr-2" />
+                    Export as Excel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+          
           <button 
             onClick={() => setIsAddModalOpen(true)}
             className="btn btn-primary flex items-center justify-center w-full sm:w-auto"
@@ -233,28 +339,46 @@ const DataPage: React.FC = () => {
                 className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
               >
                 <Calendar className="h-4 w-4 mr-2" />
-                {selectedMonth || 'Select Month'}
+                {selectedMonth ? (() => {
+                  const [year, month] = selectedMonth.split('-');
+                  const monthName = new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString('en-US', { 
+                    month: 'long',
+                    year: 'numeric',
+                    timeZone: 'Europe/Tirane'
+                  });
+                  return monthName;
+                })() : 'Select Month'}
                 <ChevronDown className="h-4 w-4 ml-2" />
               </button>
               
               {isMonthSelectorOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                   <div className="p-4">
                     <div className="mb-4">
                       <h3 className="text-sm font-medium text-gray-900 mb-2">CURRENT PERIOD:</h3>
                       <div className="flex items-center p-2 bg-gray-50 border rounded">
                         <Calendar className="h-4 w-4 text-gray-400 mr-2" />
-                        <span className="text-sm text-gray-700">August 2025</span>
+                        <span className="text-sm text-gray-700">
+                          {new Date().toLocaleDateString('en-US', { 
+                            month: 'long', 
+                            year: 'numeric',
+                            timeZone: 'Europe/Tirane'
+                          })}
+                        </span>
                       </div>
                     </div>
                     
                     <div className="mb-4">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">AVAILABLE YEARS:</h3>
-                      <div className="space-y-1">
-                        {['2024', '2025', '2026'].map((year) => (
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">SELECT YEAR:</h3>
+                      <div className="grid grid-cols-3 gap-1">
+                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((year) => (
                           <button
                             key={year}
-                            onClick={() => setSelectedMonth(`${year}-08`)}
+                            onClick={() => {
+                              const currentMonth = new Date().getMonth() + 1;
+                              setSelectedMonth(`${year}-${currentMonth.toString().padStart(2, '0')}`);
+                              setIsMonthSelectorOpen(false);
+                            }}
                             className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded"
                           >
                             {year}
@@ -264,14 +388,15 @@ const DataPage: React.FC = () => {
                     </div>
                     
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">QUICK ACCESS:</h3>
-                      <div className="space-y-1 max-h-32 overflow-y-auto">
-                        {['June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">SELECT MONTH:</h3>
+                      <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto">
+                        {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
                           <button
                             key={month}
                             onClick={() => {
                               const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(month) + 1;
-                              setSelectedMonth(`2025-${monthNum.toString().padStart(2, '0')}`);
+                              const currentYear = new Date().getFullYear();
+                              setSelectedMonth(`${currentYear}-${monthNum.toString().padStart(2, '0')}`);
                               setIsMonthSelectorOpen(false);
                             }}
                             className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded"
@@ -279,6 +404,102 @@ const DataPage: React.FC = () => {
                             {month}
                           </button>
                         ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 pt-4 border-t">
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">CUSTOM SELECTION:</h3>
+                      <div className="space-y-2">
+                        <div className="flex space-x-2">
+                          <select 
+                            className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            onChange={(e) => {
+                              const selectedMonth = e.target.value;
+                              const currentYear = new Date().getFullYear();
+                              if (selectedMonth) {
+                                const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(selectedMonth) + 1;
+                                setSelectedMonth(`${currentYear}-${monthNum.toString().padStart(2, '0')}`);
+                                setIsMonthSelectorOpen(false);
+                              }
+                            }}
+                          >
+                            <option value="">Select Month</option>
+                            {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
+                              <option key={month} value={month}>{month}</option>
+                            ))}
+                          </select>
+                          <input
+                            type="number"
+                            placeholder="Year"
+                            min="2020"
+                            max="2030"
+                            defaultValue={new Date().getFullYear()}
+                            className="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                const year = e.currentTarget.value;
+                                const monthSelect = e.currentTarget.parentElement?.querySelector('select') as HTMLSelectElement;
+                                if (year && monthSelect.value) {
+                                  const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(monthSelect.value) + 1;
+                                  setSelectedMonth(`${year}-${monthNum.toString().padStart(2, '0')}`);
+                                  setIsMonthSelectorOpen(false);
+                                }
+                              }
+                            }}
+                          />
+                        </div>
+                        <button
+                          onClick={() => {
+                            const monthSelect = document.querySelector('.month-selector select') as HTMLSelectElement;
+                            const yearInput = document.querySelector('.month-selector input[type="number"]') as HTMLInputElement;
+                            if (monthSelect?.value && yearInput?.value) {
+                              const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(monthSelect.value) + 1;
+                              setSelectedMonth(`${yearInput.value}-${monthNum.toString().padStart(2, '0')}`);
+                              setIsMonthSelectorOpen(false);
+                            }
+                          }}
+                          className="w-full px-3 py-1 text-sm bg-primary-600 text-white rounded hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        >
+                          Apply Selection
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 pt-4 border-t">
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">QUICK SELECTIONS:</h3>
+                      <div className="space-y-1">
+                        {(() => {
+                          const currentYear = new Date().getFullYear();
+                          const currentMonth = new Date().getMonth();
+                          const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                          
+                          return [
+                            { year: currentYear - 1, month: 12, label: 'December 2024' },
+                            { year: currentYear, month: 1, label: 'January 2025' },
+                            { year: currentYear, month: 2, label: 'February 2025' },
+                            { year: currentYear, month: 3, label: 'March 2025' },
+                            { year: currentYear, month: 4, label: 'April 2025' },
+                            { year: currentYear, month: 5, label: 'May 2025' },
+                            { year: currentYear, month: 6, label: 'June 2025' },
+                            { year: currentYear, month: 7, label: 'July 2025' },
+                            { year: currentYear, month: 8, label: 'August 2025' },
+                            { year: currentYear, month: 9, label: 'September 2025' },
+                            { year: currentYear, month: 10, label: 'October 2025' },
+                            { year: currentYear, month: 11, label: 'November 2025' },
+                            { year: currentYear, month: 12, label: 'December 2025' },
+                          ].map((item) => (
+                            <button
+                              key={item.label}
+                              onClick={() => {
+                                setSelectedMonth(`${item.year}-${item.month.toString().padStart(2, '0')}`);
+                                setIsMonthSelectorOpen(false);
+                              }}
+                              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                            >
+                              {item.label}
+                            </button>
+                          ));
+                        })()}
                       </div>
                     </div>
                   </div>
@@ -304,7 +525,7 @@ const DataPage: React.FC = () => {
                   <Fuel className="h-6 w-6 text-red-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Today's Consumption</p>
+                  <p className="text-sm font-medium text-gray-600">{getConsumptionLabel()}</p>
                   <p className="text-2xl font-bold text-gray-900">{(totalConsumption || 0).toFixed(0)}L</p>
                 </div>
               </div>
@@ -316,7 +537,7 @@ const DataPage: React.FC = () => {
                   <Fuel className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Today's Refills</p>
+                  <p className="text-sm font-medium text-gray-600">{getRefillsLabel()}</p>
                   <p className="text-2xl font-bold text-gray-900">{(totalRefills || 0).toFixed(0)}L</p>
                 </div>
               </div>
@@ -424,7 +645,14 @@ const DataPage: React.FC = () => {
                     <tbody>
                       {filteredDailyData.map((item) => (
                         <tr key={item.id}>
-                          <td className="font-medium text-xs sm:text-sm">{item.date}</td>
+                          <td className="font-medium text-xs sm:text-sm">
+                            {(() => {
+                              const date = new Date(item.date);
+                              const dateStr = date.toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'});
+                              const timeStr = date.getHours() === 0 && date.getMinutes() === 0 ? '' : ` ${date.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Tirane'})}`;
+                              return dateStr + timeStr;
+                            })()}
+                          </td>
                           <td>
                             <div>
                               <p className="font-medium text-xs sm:text-sm">{item.machinery_name}</p>
@@ -509,64 +737,7 @@ const DataPage: React.FC = () => {
             )}
           </div>
 
-          {/* Summary Cards */}
-          {activeTab === 'monthly' && isSuperAdmin() && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <div className="card">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Totals</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Total Consumption</span>
-                    <span className="font-semibold">3,710L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Average Daily</span>
-                    <span className="font-semibold">119.7L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Peak Day</span>
-                    <span className="font-semibold">185L</span>
-                  </div>
-                </div>
-              </div>
 
-              <div className="card">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Consumers</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Crane #2</span>
-                    <span className="font-semibold">1,680L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Excavator #3</span>
-                    <span className="font-semibold">1,250L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Generator #1</span>
-                    <span className="font-semibold">780L</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="card">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">By Location</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Port Terminal</span>
-                    <span className="font-semibold">1,680L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Construction Site A</span>
-                    <span className="font-semibold">1,250L</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Warehouse B</span>
-                    <span className="font-semibold">780L</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </>
       )}
 
@@ -575,6 +746,18 @@ const DataPage: React.FC = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSuccess={handleAddSuccess}
+      />
+
+      {/* Tank Analysis Modal */}
+      <TankAnalysisModal
+        isOpen={isTankAnalysisOpen}
+        onClose={() => setIsTankAnalysisOpen(false)}
+      />
+
+      {/* Central Tank Analysis Modal */}
+      <CentralTankAnalysisModal
+        isOpen={isCentralTankAnalysisOpen}
+        onClose={() => setIsCentralTankAnalysisOpen(false)}
       />
     </div>
   );

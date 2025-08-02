@@ -14,33 +14,7 @@ const MachineryPage: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMachinery, setSelectedMachinery] = useState<Machinery | null>(null);
 
-  // Mock data - in a real app, this would come from API calls
-  const mockMachinery = [
-    {
-      id: 1,
-      name: 'Excavator #3',
-      type: 'Heavy Equipment',
-      place_name: 'Construction Site A',
-      capacity: 500,
-      description: 'Primary excavation equipment'
-    },
-    {
-      id: 2,
-      name: 'Generator #1',
-      type: 'Power Generation',
-      place_name: 'Warehouse B',
-      capacity: 200,
-      description: 'Backup power generator'
-    },
-    {
-      id: 3,
-      name: 'Crane #2',
-      type: 'Lifting Equipment',
-      place_name: 'Port Terminal',
-      capacity: 800,
-      description: 'Mobile crane for cargo handling'
-    }
-  ];
+
 
   // Load machinery data
   useEffect(() => {
@@ -51,10 +25,10 @@ const MachineryPage: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await machineryAPI.getAll();
-      setMachinery(response.data || mockMachinery);
+      setMachinery(response.data || []);
     } catch (error) {
       console.error('Error loading machinery:', error);
-      setMachinery(mockMachinery); // Fallback to mock data
+      setMachinery([]); // Empty array if no data
     } finally {
       setIsLoading(false);
     }
