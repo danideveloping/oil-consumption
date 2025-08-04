@@ -119,6 +119,11 @@ const DataPage: React.FC = () => {
       return sum + litres;
     }, 0);
 
+  // Calculate active days (unique dates with data)
+  const activeDays = selectedDate 
+    ? (filteredDailyData.length > 0 ? 1 : 0)
+    : new Set(filteredDailyData.map(item => new Date(item.date).toISOString().split('T')[0])).size;
+
   // Get the appropriate label based on whether a date is selected
   const getConsumptionLabel = () => {
     if (selectedDate) {
@@ -562,7 +567,7 @@ const DataPage: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Active Days</p>
-                  <p className="text-2xl font-bold text-gray-900">15</p>
+                  <p className="text-2xl font-bold text-gray-900">{activeDays}</p>
                 </div>
               </div>
             </div>

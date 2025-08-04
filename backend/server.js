@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const database = require('./config/database');
 const authRoutes = require('./routes/auth');
 const machineryRoutes = require('./routes/machinery');
 const dataRoutes = require('./routes/data');
@@ -34,8 +35,19 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Initialize database and start server
+async function startServer() {
+  try {
+    await database.connect();
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 module.exports = app; 
