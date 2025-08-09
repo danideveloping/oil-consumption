@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Fuel } from 'lucide-react';
-import { dataAPI, machineryAPI, placesAPI } from '../services/api';
+import { dataAPI, machineryAPI, Machinery } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import toast from 'react-hot-toast';
 
@@ -11,13 +11,6 @@ interface OilEntryFormData {
   litres: number;
   type: 'consumption' | 'refill' | 'maintenance';
   notes?: string;
-}
-
-interface Machinery {
-  id: number;
-  name: string;
-  type: string;
-  place_name?: string;
 }
 
 interface AddOilEntryModalProps {

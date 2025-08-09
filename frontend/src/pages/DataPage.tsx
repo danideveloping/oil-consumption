@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Calendar, BarChart3, Fuel, Filter, Download, ChevronDown, FileText, FileSpreadsheet, Settings } from 'lucide-react';
+import { Plus, Calendar, BarChart3, Fuel, Download, ChevronDown, FileText, FileSpreadsheet, Settings } from 'lucide-react';
 import AddOilEntryModal from '../components/AddOilEntryModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PastMonthsData from '../components/PastMonthsData';
@@ -475,8 +475,8 @@ const DataPage: React.FC = () => {
                       <div className="space-y-1">
                         {(() => {
                           const currentYear = new Date().getFullYear();
-                          const currentMonth = new Date().getMonth();
-                          const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                          // const currentMonth = new Date().getMonth();
+                          // const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                           
                           return [
                             { year: currentYear - 1, month: 12, label: 'December 2024' },

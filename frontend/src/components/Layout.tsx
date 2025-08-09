@@ -13,7 +13,7 @@ import {
   Fuel
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useFilter } from '../contexts/FilterContext';
+// import { useFilter } from '../contexts/FilterContext';
 
 interface LayoutProps {
   children: React.ReactNode;

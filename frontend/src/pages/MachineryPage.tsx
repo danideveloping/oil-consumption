@@ -4,11 +4,11 @@ import AddMachineryModal from '../components/AddMachineryModal';
 import EditMachineryModal from '../components/EditMachineryModal';
 import DeleteMachineryModal from '../components/DeleteMachineryModal';
 import { machineryAPI, Machinery } from '../services/api';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 
 const MachineryPage: React.FC = () => {
   const [machinery, setMachinery] = useState<Machinery[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -23,14 +23,14 @@ const MachineryPage: React.FC = () => {
 
   const loadMachinery = async () => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await machineryAPI.getAll();
       setMachinery(response.data || []);
     } catch (error) {
       console.error('Error loading machinery:', error);
       setMachinery([]); // Empty array if no data
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -108,7 +108,7 @@ const MachineryPage: React.FC = () => {
               <p className="text-sm font-medium text-gray-600">Total Capacity</p>
               <p className="text-2xl font-bold text-gray-900">
                 {machinery.reduce((sum, m) => {
-                  const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity) || 0;
+                  const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity || '0') || 0;
                   return sum + capacity;
                 }, 0).toFixed(2)}L
               </p>

@@ -88,7 +88,7 @@ const YearMonthDataPage: React.FC = () => {
     
     const consumptionData = oilData.filter(entry => entry.type === 'consumption');
     const refillData = oilData.filter(entry => entry.type === 'refill');
-    const maintenanceData = oilData.filter(entry => entry.type === 'maintenance');
+    // const maintenanceData = oilData.filter(entry => entry.type === 'maintenance');
     
     const totalConsumption = consumptionData.reduce((sum, entry) => {
       const litres = typeof entry.litres === 'number' ? entry.litres : parseFloat(entry.litres) || 0;
@@ -100,10 +100,10 @@ const YearMonthDataPage: React.FC = () => {
       return sum + litres;
     }, 0);
     
-    const totalMaintenance = maintenanceData.reduce((sum, entry) => {
-      const litres = typeof entry.litres === 'number' ? entry.litres : parseFloat(entry.litres) || 0;
-      return sum + litres;
-    }, 0);
+    // const totalMaintenance = maintenanceData.reduce((sum, entry) => {
+    //   const litres = typeof entry.litres === 'number' ? entry.litres : parseFloat(entry.litres) || 0;
+    //   return sum + litres;
+    // }, 0);
 
     // Get unique machinery and places
     const uniqueMachinery = [...new Set(oilData.map(entry => entry.machinery_name))];

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Search, Filter, ChevronLeft, ChevronRight, Fuel, TrendingUp, Settings, BarChart3, Calendar, MapPin } from 'lucide-react';
+import { X, Search, ChevronLeft, ChevronRight, Fuel, TrendingUp, Settings, BarChart3, Calendar, MapPin } from 'lucide-react';
 
 interface Activity {
   id: number;

@@ -51,7 +51,7 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
       setValue('name', machinery.name);
       setValue('type', ''); // Don't auto-populate type - keep it empty
       setValue('place_id', machinery.place_id || 0);
-      setValue('capacity', machinery.capacity || 0);
+      setValue('capacity', Number(machinery.capacity) || 0);
       setValue('description', machinery.description || '');
     }
   }, [machinery, isOpen, setValue]);
@@ -76,10 +76,10 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
       // Clean up the data - remove empty strings and convert to proper types
       const cleanData = {
         name: data.name,
-        type: data.type || null,
+        type: data.type || undefined,
         place_id: Number(data.place_id),
-        capacity: data.capacity || null,
-        description: data.description || null
+        capacity: data.capacity ? Number(data.capacity) : 0,
+        description: data.description || undefined
       };
 
       // Check for duplicate machinery at the same location (excluding current machinery)

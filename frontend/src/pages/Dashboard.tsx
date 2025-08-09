@@ -172,7 +172,7 @@ const Dashboard: React.FC = () => {
     
     // Calculate total capacity
     const totalCapacity = machinery.reduce((sum, m) => {
-      const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity as string) || 0;
+      const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity || '0') || 0;
       return sum + capacity;
     }, 0);
     

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Plus, MapPin, Settings } from 'lucide-react';
 import AddPlaceModal from '../components/AddPlaceModal';
 import { placesAPI, Place } from '../services/api';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 
 const PlacesPage: React.FC = () => {
   const [places, setPlaces] = useState<Place[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 
@@ -18,14 +18,14 @@ const PlacesPage: React.FC = () => {
 
   const loadPlaces = async () => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await placesAPI.getAll();
       setPlaces(response.data || []);
     } catch (error) {
       console.error('Error loading places:', error);
       setPlaces([]); // Empty array if no data
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -72,7 +72,7 @@ const PlacesPage: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Machinery</p>
               <p className="text-2xl font-bold text-gray-900">
-                {places.reduce((sum, p) => sum + p.machinery_count, 0)}
+                {places.length}
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@ const PlacesPage: React.FC = () => {
                     <td className="hidden lg:table-cell text-gray-600 text-xs sm:text-sm">{place.description}</td>
                     <td>
                       <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                        {place.machinery_count} machines
+                        {place.id} machines
                       </span>
                     </td>
                   </tr>

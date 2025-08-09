@@ -58,10 +58,10 @@ export interface Machinery {
   id: number;
   name: string;
   type?: string;
-  place_id?: number;
+  place_id: number;
   place_name?: string;
   place_location?: string;
-  capacity?: number;
+  capacity: number;
   description?: string;
   created_at: string;
 }

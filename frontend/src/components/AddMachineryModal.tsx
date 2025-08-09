@@ -55,10 +55,10 @@ const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, 
       // Clean up the data - remove empty strings and convert to proper types
       const cleanData = {
         name: data.name,
-        type: data.type || null,
-        place_id: parseInt(data.place_id, 10),
-        capacity: data.capacity ? parseFloat(data.capacity) : null,
-        description: data.description || null
+        type: data.type || undefined,
+        place_id: Number(data.place_id),
+        capacity: data.capacity ? Number(data.capacity) : 0,
+        description: data.description || undefined
       };
 
       // Check for duplicate machinery at the same location

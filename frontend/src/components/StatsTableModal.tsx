@@ -43,15 +43,15 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'Europe/Tirane'
-    });
-  };
+  // const formatDate = (dateString: string) => {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('en-US', {
+  //     year: 'numeric',
+  //     month: 'short',
+  //     day: 'numeric',
+  //     timeZone: 'Europe/Tirane'
+  //   });
+  // };
 
   if (!isOpen) return null;
 
