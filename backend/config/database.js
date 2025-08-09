@@ -72,9 +72,18 @@ class Database {
       ];
 
       for (const sql of tables) {
-        await this.pool.query(sql);
+        try {
+          await this.pool.query(sql);
+        } catch (error) {
+          // Ignore race-condition errors when tables/sequences already exist
+          // 42P07: duplicate_table, 23505: unique_violation (e.g., sequence name)
+          if (error && (error.code === '42P07' || error.code === '23505')) {
+            continue;
+          }
+          throw error;
+        }
       }
-      
+
       console.log('All tables created successfully');
       return Promise.resolve();
     } catch (err) {
