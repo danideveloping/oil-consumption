@@ -44,6 +44,16 @@ app.use(express.urlencoded({ extended: true }));
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Handle React Router - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/oil/api') && !req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  }
+});
+
 // Routes
 app.use('/oil/api/auth', authRoutes);
 app.use('/oil/api/machinery', machineryRoutes);
