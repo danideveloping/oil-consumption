@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { config } from '../config/production';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'https://oil-consumption.onrender.com/oil/api',
+  baseURL: `${config.apiBaseUrl}/oil/api`,
   headers: {
     'Content-Type': 'application/json',
   },

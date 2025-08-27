@@ -11,15 +11,33 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: [
-    'https://shahiniconstruction.com',
-    'https://www.shahiniconstruction.com',
-    'http://localhost:3000',
-    'http://localhost:5173'
-  ],
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://shahiniconstruction.com',
+      'https://www.shahiniconstruction.com',
+      'http://localhost:3000',
+      'http://localhost:5173'
+    ];
+    
+    // Add your Hostinger domain here
+    if (process.env.NODE_ENV === 'production') {
+      allowedOrigins.push(process.env.FRONTEND_URL || 'https://yourdomain.com');
+    }
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,6 +49,11 @@ app.use('/oil/api/auth', authRoutes);
 app.use('/oil/api/machinery', machineryRoutes);
 app.use('/oil/api/data', dataRoutes);
 app.use('/oil/api/places', placesRoutes);
+
+// Health check endpoint for Render
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 
 // Health check
 app.get('/oil/api/health', (req, res) => {
