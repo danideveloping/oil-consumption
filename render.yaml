@@ -1,9 +1,10 @@
 services:
+  # Backend API Service
   - type: web
     name: nafta-backend
     env: node
     plan: free
-    buildCommand: npm install && cd backend && npm install
+    buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -11,6 +12,19 @@ services:
       - key: PORT
         value: 10000
     healthCheckPath: /api/health
+    autoDeploy: true
+
+  # Frontend Static Site
+  - type: web
+    name: nafta-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     autoDeploy: true
 
 databases:
