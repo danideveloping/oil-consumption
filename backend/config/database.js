@@ -10,8 +10,10 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  // SSL configuration for Render - force SSL
-  ssl: process.env.NODE_ENV === 'production' ? true : false
+  // Force SSL for Render database
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 class Database {
