@@ -1,4 +1,4 @@
 export const config = {
-  apiBaseUrl: 'https://nafta-app.onrender.com',
+  apiBaseUrl: 'https://oil-consumption-kg14.onrender.com',
   environment: 'production'
 }; 

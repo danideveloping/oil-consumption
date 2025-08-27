@@ -20,7 +20,8 @@ const corsOptions = {
       'https://shahiniconstruction.com',
       'https://www.shahiniconstruction.com',
       'http://localhost:3000',
-      'http://localhost:5173'
+      'http://localhost:5173',
+      'https://oil-consumption-kg14.onrender.com'  // Add your Render domain
     ];
     
     // Add your Hostinger domain here
