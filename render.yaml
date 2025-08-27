@@ -3,7 +3,7 @@ services:
     name: nafta-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install
+    buildCommand: npm install
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
