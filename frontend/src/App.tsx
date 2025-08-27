@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
-import SuperAdminRoute from './components/SuperAdminRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
@@ -66,14 +65,7 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/machinery" element={<MachineryPage />} />
                   <Route path="/places" element={<PlacesPage />} />
-                  <Route 
-                    path="/data" 
-                    element={
-                      <SuperAdminRoute>
-                        <DataPage />
-                      </SuperAdminRoute>
-                    } 
-                  />
+                  <Route path="/data" element={<DataPage />} />
                   <Route path="/year-month-data" element={<YearMonthDataPage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
