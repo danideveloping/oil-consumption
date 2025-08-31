@@ -26,13 +26,16 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
 
   const onSubmit = async (data: PlaceFormData) => {
     try {
-      await placesAPI.create(data);
+      console.log('📝 Submitting place data:', data);
+      const response = await placesAPI.create(data);
+      console.log('✅ Place created successfully:', response);
       toast.success('Vendi u shtua me sukses!');
       reset();
+      console.log('🔄 Calling onSuccess callback...');
       onSuccess();
       onClose();
     } catch (error: any) {
-      console.error('Error adding place:', error);
+      console.error('❌ Error adding place:', error);
       toast.error(error.response?.data?.message || 'Dështoi shtimi i vendit');
     }
   };

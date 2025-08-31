@@ -18,11 +18,15 @@ const PlacesPage: React.FC = () => {
 
   const loadPlaces = async () => {
     try {
+      console.log('🔄 Loading places...');
       // setIsLoading(true);
       const response = await placesAPI.getAll();
+      console.log('📦 Places response:', response);
+      console.log('📦 Places data:', response.data);
       setPlaces(response.data || []);
+      console.log('✅ Places state updated with:', response.data || []);
     } catch (error) {
-      console.error('Error loading places:', error);
+      console.error('❌ Error loading places:', error);
       setPlaces([]); // Empty array if no data
     } finally {
       // setIsLoading(false);
@@ -30,6 +34,7 @@ const PlacesPage: React.FC = () => {
   };
 
   const handleAddSuccess = () => {
+    console.log('🎉 handleAddSuccess called, reloading places...');
     loadPlaces();
   };
 

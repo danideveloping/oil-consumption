@@ -3,7 +3,7 @@ import { config } from '../config/production';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: `${config.apiBaseUrl}/oil/api`,
+  baseURL: `${config.apiBaseUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -124,12 +124,17 @@ export const authAPI = {
 
 // Places API
 export const placesAPI = {
-  getAll: () => api.get<Place[]>('/places'),
+  getAll: () => {
+    console.log('🔍 Fetching all places...');
+    return api.get<Place[]>('/places');
+  },
   
   getById: (id: number) => api.get<Place>(`/places/${id}`),
   
-  create: (data: Omit<Place, 'id' | 'created_at'>) =>
-    api.post<Place>('/places', data),
+  create: (data: Omit<Place, 'id' | 'created_at'>) => {
+    console.log('➕ Creating place with data:', data);
+    return api.post<Place>('/places', data);
+  },
   
   update: (id: number, data: Partial<Omit<Place, 'id' | 'created_at'>>) =>
     api.put<Place>(`/places/${id}`, data),

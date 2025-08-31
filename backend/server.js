@@ -50,16 +50,16 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Handle React Router - serve index.html for all non-API routes
 app.get('*', (req, res) => {
-  if (!req.path.startsWith('/oil/api') && !req.path.startsWith('/api')) {
+  if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
   }
 });
 
 // Routes
-app.use('/oil/api/auth', authRoutes);
-app.use('/oil/api/machinery', machineryRoutes);
-app.use('/oil/api/data', dataRoutes);
-app.use('/oil/api/places', placesRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/machinery', machineryRoutes);
+app.use('/api/data', dataRoutes);
+app.use('/api/places', placesRoutes);
 
 // Health check endpoint for Render
 app.get('/api/health', (req, res) => {
@@ -67,8 +67,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // Health check
-app.get('/oil/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Oil Tank Management API is running' });
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Tank Management API is running' });
 });
 
 // Error handling middleware
