@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 interface LoginFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
   } = useForm<LoginFormData>();
 
   const onSubmit = async (data: LoginFormData) => {
-    await login(data.email, data.password);
+    await login(data.username, data.password);
   };
 
   return (
@@ -34,56 +34,56 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <h2 className="mt-6 text-center text-2xl sm:text-3xl font-bold text-gray-900">
-            Oil Tank Management
+                          Menaxhimi i Rezervuarëve të Naftës
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to your account
+            Hyr në llogarinë tënde
           </p>
         </div>
         
         <div className="bg-white py-8 px-6 shadow-lg rounded-lg">
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Emri i përdoruesit
               </label>
               <div className="mt-1">
                 <input
-                  {...register('email', {
-                    required: 'Email is required',
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: 'Please enter a valid email address',
+                  {...register('username', {
+                    required: 'Emri i përdoruesit është i detyrueshëm',
+                    minLength: {
+                      value: 3,
+                      message: 'Emri i përdoruesit duhet të ketë të paktën 3 karaktere',
                     },
                   })}
-                  type="email"
-                  autoComplete="email"
+                  type="text"
+                  autoComplete="username"
                   className="input"
-                  placeholder="Enter your email"
+                  placeholder="Shkruaj emrin tënd të përdoruesit"
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                {errors.username && (
+                  <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
                 )}
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                Fjalëkalimi
               </label>
               <div className="mt-1 relative">
                 <input
                   {...register('password', {
-                    required: 'Password is required',
+                    required: 'Fjalëkalimi është i detyrueshëm',
                     minLength: {
                       value: 6,
-                      message: 'Password must be at least 6 characters',
+                      message: 'Fjalëkalimi duhet të ketë të paktën 6 karaktere',
                     },
                   })}
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   className="input pr-10"
-                  placeholder="Enter your password"
+                  placeholder="Shkruaj fjalëkalimin tënd"
                 />
                 <button
                   type="button"
@@ -111,22 +111,22 @@ const LoginPage: React.FC = () => {
                 {isLoading ? (
                   <>
                     <LoadingSpinner size="sm" className="mr-2" />
-                    Signing in...
+                    Duke hyrë...
                   </>
                 ) : (
-                  'Sign in'
+                  'Hyr'
                 )}
               </button>
             </div>
 
             <div className="text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
+                Nuk ke llogari?{' '}
                 <Link
                   to="/register"
                   className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
                 >
-                  Sign up
+                  Regjistrohu
                 </Link>
               </p>
             </div>

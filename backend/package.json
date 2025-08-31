@@ -8,6 +8,7 @@
     "dev": "nodemon server.js",
     "init-db": "node scripts/initDatabase.js",
     "create-superadmin": "node scripts/createSuperAdmin.js",
+
     "migrate-type": "node scripts/migrateMachineryType.js",
     "check-db": "node scripts/checkDatabase.js"
   },

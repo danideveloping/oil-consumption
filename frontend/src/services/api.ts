@@ -43,7 +43,6 @@ api.interceptors.response.use(
 export interface User {
   id: number;
   username: string;
-  email: string;
   role: string;
 }
 
@@ -116,11 +115,11 @@ export interface PaginatedResponse<T> {
 
 // Authentication API
 export const authAPI = {
-  login: (email: string, password: string) =>
-    api.post('/auth/login', { email, password }),
+  login: (username: string, password: string) =>
+    api.post('/auth/login', { username, password }),
   
-  register: (username: string, email: string, password: string) =>
-    api.post('/auth/register', { username, email, password }),
+  register: (username: string, password: string) =>
+    api.post('/auth/register', { username, password }),
 };
 
 // Places API

@@ -24,12 +24,12 @@ const DeleteMachineryModal: React.FC<DeleteMachineryModalProps> = ({
     try {
       setIsDeleting(true);
       await machineryAPI.delete(machinery.id);
-      toast.success('Machinery deleted successfully!');
+      toast.success('Makineri u fshi me sukses!');
       onSuccess();
       onClose();
     } catch (error: any) {
       console.error('Error deleting machinery:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete machinery');
+      toast.error(error.response?.data?.message || 'Dështoi fshirja e makinerisë');
     } finally {
       setIsDeleting(false);
     }
@@ -42,7 +42,7 @@ const DeleteMachineryModal: React.FC<DeleteMachineryModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-md">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Delete Machinery</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Fshi Makineri</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -63,21 +63,21 @@ const DeleteMachineryModal: React.FC<DeleteMachineryModalProps> = ({
           {/* Warning Message */}
           <div className="text-center mb-6">
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Are you sure you want to delete this machinery?
+              A jeni të sigurt që dëshironi ta fshini këtë makineri?
             </h3>
             <p className="text-gray-600 mb-4">
-              This action cannot be undone. All oil consumption data associated with this machinery will also be deleted.
+              Ky veprim nuk mund të anulohet. Të gjitha të dhënat e konsumit të naftës që lidhen me këtë makineri do të fshihen gjithashtu.
             </p>
             
             {/* Machinery Details */}
             <div className="bg-gray-50 rounded-lg p-4 text-left">
               <div className="font-medium text-gray-900">{machinery.name}</div>
               <div className="text-sm text-gray-600">
-                Type: {machinery.type}
+                Tipi: {machinery.type}
               </div>
               {machinery.place_name && (
                 <div className="text-sm text-gray-600">
-                  Location: {machinery.place_name}
+                  Vendndodhja: {machinery.place_name}
                 </div>
               )}
             </div>
@@ -91,7 +91,7 @@ const DeleteMachineryModal: React.FC<DeleteMachineryModalProps> = ({
               className="flex-1 btn btn-secondary"
               disabled={isDeleting}
             >
-              Cancel
+              Anulo
             </button>
             <button
               type="button"
@@ -99,7 +99,7 @@ const DeleteMachineryModal: React.FC<DeleteMachineryModalProps> = ({
               className="flex-1 btn bg-red-600 hover:bg-red-700 text-white"
               disabled={isDeleting}
             >
-              {isDeleting ? 'Deleting...' : 'Delete Machinery'}
+              {isDeleting ? 'Duke fshirë...' : 'Fshi Makineri'}
             </button>
           </div>
         </div>

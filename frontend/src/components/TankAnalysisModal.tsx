@@ -79,7 +79,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
       setMachineryList(response.data);
     } catch (error) {
       console.error('Error loading machinery:', error);
-      toast.error('Failed to load machinery list');
+      toast.error('Dështoi ngarkimi i listës së makinerisë');
     }
   };
 
@@ -96,7 +96,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
       setTankAnalysis(response.data);
     } catch (error) {
       console.error('Error loading tank analysis:', error);
-      toast.error('Failed to load tank analysis');
+      toast.error('Dështoi ngarkimi i analizës së rezervuarit');
     } finally {
       setIsLoading(false);
     }
@@ -138,8 +138,8 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Tank Capacity Analysis</h2>
-            <p className="text-sm text-gray-600">Monitor tank levels and consumption discrepancies</p>
+            <h2 className="text-xl font-bold text-gray-900">Analiza e Kapacitetit të Rezervuarit</h2>
+                          <p className="text-sm text-gray-600">Monitoro nivelet e rezervuarit dhe mospërputhjet e konsumit</p>
           </div>
           <button
             onClick={onClose}
@@ -173,9 +173,9 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
           {/* Date Range */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Start Date (Optional)
-              </label>
+                                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Data e Fillimit (Opsionale)
+                        </label>
               <div className="relative">
                 <input
                   type="date"
@@ -194,9 +194,9 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                End Date (Optional)
-              </label>
+                                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Data e Mbarimit (Opsionale)
+                        </label>
               <div className="relative">
                 <input
                   type="date"
@@ -219,7 +219,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <LoadingSpinner />
-              <span className="ml-2 text-gray-600">Loading tank analysis...</span>
+              <span className="ml-2 text-gray-600">Duke ngarkuar analizën e rezervuarit...</span>
             </div>
           ) : tankAnalysis ? (
             <div className="space-y-6">
@@ -243,7 +243,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <Fuel className="h-6 w-6 text-green-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Current Level</p>
+                                              <p className="text-sm font-medium text-gray-600">Niveli i Aktual</p>
                       <p className="text-2xl font-bold text-gray-900">{(Number(tankAnalysis.currentTankLevel) || 0).toFixed(1)}L</p>
                     </div>
                   </div>
@@ -267,9 +267,9 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <Calendar className="h-6 w-6 text-purple-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Last Refill</p>
+                                              <p className="text-sm font-medium text-gray-600">Refillin e Fundit</p>
                       <p className="text-lg font-bold text-gray-900">
-                        {tankAnalysis.lastRefillDate ? formatDate(tankAnalysis.lastRefillDate) : 'None'}
+                                                  {tankAnalysis.lastRefillDate ? formatDate(tankAnalysis.lastRefillDate) : 'Asnjë'}
                       </p>
                     </div>
                   </div>
@@ -302,7 +302,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <AlertTriangle className="h-6 w-6 text-red-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Overall Discrepancy</p>
+                                              <p className="text-sm font-medium text-gray-600">Discrepanca e Përgjithshme</p>
                       <p className={`text-2xl font-bold ${getDiscrepancyColor(Number(tankAnalysis.statistics.overallDiscrepancy) || 0)}`}>
                         {(Number(tankAnalysis.statistics.overallDiscrepancy) || 0).toFixed(1)}L
                       </p>
@@ -319,7 +319,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <BarChart3 className="h-6 w-6 text-orange-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Avg Discrepancy</p>
+                                              <p className="text-sm font-medium text-gray-600">Discrepanca e Mesatare</p>
                       <p className={`text-2xl font-bold ${getDiscrepancyColor(Number(tankAnalysis.statistics.averageDiscrepancy) || 0)}`}>
                         {(Number(tankAnalysis.statistics.averageDiscrepancy) || 0).toFixed(1)}L
                       </p>
@@ -336,7 +336,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <Fuel className="h-6 w-6 text-green-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Refills</p>
+                                              <p className="text-sm font-medium text-gray-600">Refillimet e Përgjithshme</p>
                       <p className="text-2xl font-bold text-gray-900">{tankAnalysis.statistics.totalRefills || 0}</p>
                     </div>
                   </div>
@@ -348,7 +348,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
                       <TrendingDown className="h-6 w-6 text-blue-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Consumption</p>
+                                              <p className="text-sm font-medium text-gray-600">Konsumimi i Përgjithshëm</p>
                       <p className="text-2xl font-bold text-gray-900">{(Number(tankAnalysis.statistics.totalConsumption) || 0).toFixed(1)}L</p>
                     </div>
                   </div>
@@ -357,23 +357,23 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
 
               {/* Tank Cycles Table */}
               <div className="card">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Refill Cycles Analysis</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Analiza e Cikleve të Plotësimit</h3>
                 {tankAnalysis.tankCycles.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    No refill cycles found for the selected period.
+                    <p className="text-gray-500 text-center py-8">Nuk ka të dhëna të analizës së rezervuarit për këtë makineri.</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="table min-w-full">
                       <thead>
                         <tr>
-                          <th className="text-xs sm:text-sm">Start Date</th>
-                          <th className="text-xs sm:text-sm">End Date</th>
-                          <th className="text-xs sm:text-sm">Refill Amount</th>
-                          <th className="text-xs sm:text-sm">Actual Consumption</th>
-                          <th className="text-xs sm:text-sm">Expected Consumption</th>
-                          <th className="text-xs sm:text-sm">Discrepancy</th>
-                          <th className="text-xs sm:text-sm">Percentage</th>
+                          <th className="text-xs sm:text-sm">Data e Fillimit</th>
+                          <th className="text-xs sm:text-sm">Data e Mbarimit</th>
+                          <th className="text-xs sm:text-sm">Sasia e Refillit</th>
+                          <th className="text-xs sm:text-sm">Konsumimi i Aktual</th>
+                          <th className="text-xs sm:text-sm">Konsumimi i Parashikuar</th>
+                          <th className="text-xs sm:text-sm">Discrepanca</th>
+                          <th className="text-xs sm:text-sm">Përqindje</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -407,7 +407,7 @@ const TankAnalysisModal: React.FC<TankAnalysisModalProps> = ({
             </div>
           ) : selectedMachinery ? (
             <div className="text-center py-8 text-gray-500">
-              No tank analysis data available for this machinery.
+              <p className="text-gray-500 text-center py-8">Ju lutem zgjidhni një makineri për të parë analizën e rezervuarit.</p>
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">

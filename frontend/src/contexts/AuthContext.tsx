@@ -5,15 +5,14 @@ import toast from 'react-hot-toast';
 interface User {
   id: number;
   username: string;
-  email: string;
   role: string;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
   isSuperAdmin: () => boolean;
@@ -56,10 +55,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-      const response = await authAPI.login(email, password);
+      const response = await authAPI.login(username, password);
       
       if (response.data.token && response.data.user) {
         const { token: authToken, user: userData } = response.data;
@@ -84,10 +83,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (username: string, email: string, password: string): Promise<boolean> => {
+  const register = async (username: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-      const response = await authAPI.register(username, email, password);
+      const response = await authAPI.register(username, password);
       
       if (response.data.token && response.data.user) {
         const { token: authToken, user: userData } = response.data;

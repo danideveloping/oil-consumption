@@ -20,26 +20,26 @@ const YearMonthFilter: React.FC<YearMonthFilterProps> = ({
   const years = Array.from({ length: maxYear - 2019 }, (_, i) => (maxYear - i).toString());
 
   const months = [
-    { value: '', label: 'All Months' },
-    { value: '01', label: 'January' },
-    { value: '02', label: 'February' },
-    { value: '03', label: 'March' },
-    { value: '04', label: 'April' },
-    { value: '05', label: 'May' },
-    { value: '06', label: 'June' },
-    { value: '07', label: 'July' },
-    { value: '08', label: 'August' },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' }
+    { value: '', label: 'Të Gjitha Muajt' },
+    { value: '01', label: 'Janar' },
+    { value: '02', label: 'Shkurt' },
+    { value: '03', label: 'Mars' },
+    { value: '04', label: 'Prill' },
+    { value: '05', label: 'Maj' },
+    { value: '06', label: 'Qershor' },
+    { value: '07', label: 'Korrik' },
+    { value: '08', label: 'Gusht' },
+    { value: '09', label: 'Shtator' },
+    { value: '10', label: 'Tetor' },
+    { value: '11', label: 'Nëntor' },
+    { value: '12', label: 'Dhjetor' }
   ];
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6">
       <div className="flex-1">
         <label htmlFor="year-filter" className="block text-sm font-medium text-gray-700 mb-2">
-          Year
+          Viti
         </label>
         <div className="relative">
           <select
@@ -48,7 +48,7 @@ const YearMonthFilter: React.FC<YearMonthFilterProps> = ({
             onChange={(e) => onYearChange(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-white"
           >
-            <option value="">All Years</option>
+            <option value="">Të Gjitha Vitet</option>
             {years.map((year) => (
               <option key={year} value={year}>
                 {year}
@@ -61,7 +61,7 @@ const YearMonthFilter: React.FC<YearMonthFilterProps> = ({
 
       <div className="flex-1">
         <label htmlFor="month-filter" className="block text-sm font-medium text-gray-700 mb-2">
-          Month
+          Muaji
         </label>
         <div className="relative">
           <select

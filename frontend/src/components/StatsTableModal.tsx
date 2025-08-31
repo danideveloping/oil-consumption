@@ -20,7 +20,7 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
   title,
   data,
   columns,
-  searchPlaceholder = "Search..."
+  searchPlaceholder = "Kërko..."
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,7 +63,7 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
           <div>
             <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
             <p className="text-sm text-gray-600 mt-1">
-              Showing {filteredData.length} of {data.length} entries
+              Duke shfaqur {filteredData.length} nga {data.length} hyrje
             </p>
           </div>
           <button
@@ -96,14 +96,14 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
           {paginatedData.length === 0 ? (
             <div className="p-8 text-center">
               <div className="text-gray-400 mb-4">
-                {searchTerm ? 'No results found' : 'No data available'}
+                {searchTerm ? 'Nuk u gjetën rezultate' : 'Nuk ka të dhëna të disponueshme'}
               </div>
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
                   className="text-primary-600 hover:text-primary-700 text-sm"
                 >
-                  Clear search
+                  Pastro kërkimin
                 </button>
               )}
             </div>
@@ -149,7 +149,7 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
           <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} results
+                Duke shfaqur {startIndex + 1} deri {Math.min(endIndex, filteredData.length)} nga {filteredData.length} rezultate
               </div>
               <div className="flex items-center space-x-2">
                 <button
@@ -160,7 +160,7 @@ const StatsTableModal: React.FC<StatsTableModalProps> = ({
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <span className="px-3 py-1 text-sm font-medium text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  Faqja {currentPage} nga {totalPages}
                 </span>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}

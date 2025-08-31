@@ -75,7 +75,7 @@ const YearMonthDataPage: React.FC = () => {
       setOilData(response.data?.data || []);
     } catch (error) {
       console.error('Error loading filtered data:', error);
-      toast.error('Failed to load data');
+      toast.error('Dështoi ngarkimi i të dhënave');
       setOilData([]);
     } finally {
       setIsLoading(false);
@@ -111,32 +111,32 @@ const YearMonthDataPage: React.FC = () => {
 
     return [
       {
-        name: 'Total Entries',
+        name: 'Hyrje Totale',
         value: totalEntries.toString(),
         icon: BarChart3,
         color: 'bg-blue-500',
         change: `${selectedYear}${selectedMonth ? ` - ${selectedMonth}` : ''}`
       },
       {
-        name: 'Total Consumption',
+        name: 'Konsumi Total',
         value: `${(totalConsumption || 0).toFixed(0)}L`,
         icon: Fuel,
         color: 'bg-red-500',
-        change: `${consumptionData.length} entries`
+        change: `${consumptionData.length} hyrje`
       },
       {
-        name: 'Total Refills',
+        name: 'Rimbushje Totale',
         value: `${(totalRefills || 0).toFixed(0)}L`,
         icon: TrendingUp,
         color: 'bg-green-500',
-        change: `${refillData.length} entries`
+        change: `${refillData.length} hyrje`
       },
       {
-        name: 'Active Machinery',
+        name: 'Makineri Aktive',
         value: uniqueMachinery.length.toString(),
         icon: BarChart3,
         color: 'bg-purple-500',
-        change: `${uniquePlaces.length} locations`
+        change: `${uniquePlaces.length} vendndodhje`
       }
     ];
   };
@@ -145,34 +145,31 @@ const YearMonthDataPage: React.FC = () => {
 
   // Functions to open table modals
   const openAllDataTable = () => {
-    const columns = [
-      { key: 'machinery_name', label: 'Machinery' },
-      { key: 'place_name', label: 'Location' },
-      { 
-        key: 'litres', 
-        label: 'Amount',
-        render: (value: any) => `${value}L`
-      },
-      { key: 'type', label: 'Type' },
-      { 
-        key: 'date', 
-        label: 'Date & Time',
-        render: (value: any) => {
+    setStatsTableModal({
+      isOpen: true,
+      title: `Të Gjitha Të Dhënat - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
+      data: oilData,
+      columns: [
+        { key: 'machinery_name', label: 'Makineri' },
+        { key: 'place_name', label: 'Vendndodhja' },
+        { key: 'litres', label: 'Litra', render: (value: any) => `${value}L` },
+        { key: 'type', label: 'Tipi', render: (value: any) => {
+          switch(value) {
+            case 'consumption': return 'Konsum';
+            case 'refill': return 'Plotësim';
+            case 'maintenance': return 'Mirëmbajtje';
+            default: return value;
+          }
+        }},
+        { key: 'date', label: 'Data & Ora', render: (value: any) => {
           const date = new Date(value);
           const dateStr = date.toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'});
           const timeStr = date.getHours() === 0 && date.getMinutes() === 0 ? '' : ` ${date.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Tirane'})}`;
           return dateStr + timeStr;
-        }
-      },
-      { key: 'notes', label: 'Notes' }
-    ];
-
-    setStatsTableModal({
-      isOpen: true,
-      title: `All Data - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
-      data: oilData,
-      columns,
-      searchPlaceholder: 'Search data...'
+        }},
+        { key: 'notes', label: 'Shënime' }
+      ],
+      searchPlaceholder: 'Kërko të dhëna...'
     });
   };
 
@@ -201,10 +198,10 @@ const YearMonthDataPage: React.FC = () => {
 
     setStatsTableModal({
       isOpen: true,
-      title: `Consumption Data - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
+      title: `Të Dhënat e Konsumit - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
       data: consumptionData,
       columns,
-      searchPlaceholder: 'Search consumption data...'
+      searchPlaceholder: 'Kërko të dhënat e konsumit...'
     });
   };
 
@@ -225,22 +222,22 @@ const YearMonthDataPage: React.FC = () => {
     });
 
     const columns = [
-      { key: 'name', label: 'Machinery' },
-      { key: 'total_entries', label: 'Entries' },
+      { key: 'name', label: 'Makineri' },
+      { key: 'total_entries', label: 'Hyrje' },
       { 
         key: 'total_litres', 
-        label: 'Total Litres',
+        label: 'Litrat Total',
         render: (value: any) => `${value.toFixed(0)}L`
       },
-      { key: 'types', label: 'Types' }
+      { key: 'types', label: 'Llojet' }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: `Machinery Summary - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
+      title: `Përmbledhja e Makinerisë - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
       data: machineryData,
       columns,
-      searchPlaceholder: 'Search machinery...'
+      searchPlaceholder: 'Kërko makineri...'
     });
   };
 
@@ -261,22 +258,22 @@ const YearMonthDataPage: React.FC = () => {
     });
 
     const columns = [
-      { key: 'name', label: 'Location' },
-      { key: 'total_entries', label: 'Entries' },
+      { key: 'name', label: 'Vendndodhja' },
+      { key: 'total_entries', label: 'Hyrje' },
       { 
         key: 'total_litres', 
-        label: 'Total Litres',
+        label: 'Litrat Total',
         render: (value: any) => `${value.toFixed(0)}L`
       },
-      { key: 'machinery_count', label: 'Machinery' }
+      { key: 'machinery_count', label: 'Makineri' }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: `Places Summary - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
+      title: `Përmbledhja e Vendeve - ${selectedYear}${selectedMonth ? ` ${selectedMonth}` : ''}`,
       data: placesData,
       columns,
-      searchPlaceholder: 'Search places...'
+      searchPlaceholder: 'Kërko vende...'
     });
   };
 
@@ -285,8 +282,8 @@ const YearMonthDataPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Year/Month Data Analysis</h1>
-          <p className="text-sm sm:text-base text-gray-600">View and analyze data by year and month</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Analiza e të Dhënave sipas Vitit/Muajit</h1>
+          <p className="text-sm sm:text-base text-gray-600">Shiko dhe analizo të dhënat sipas vitit dhe muajit</p>
         </div>
         {(selectedYear || selectedMonth) && (
           <button
@@ -297,10 +294,10 @@ const YearMonthDataPage: React.FC = () => {
             {isLoading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Refreshing...
+                Duke rifreskuar...
               </>
             ) : (
-              'Refresh Data'
+              'Rifresko Të Dhënat'
             )}
           </button>
         )}
@@ -308,7 +305,7 @@ const YearMonthDataPage: React.FC = () => {
 
       {/* Year/Month Filter */}
       <div className="card">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Data</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filtro Të Dhënat</h2>
         <YearMonthFilter
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
@@ -325,7 +322,7 @@ const YearMonthDataPage: React.FC = () => {
               }}
               className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              Clear Filters
+              Pastro Filtrot
             </button>
           </div>
         )}
@@ -333,7 +330,7 @@ const YearMonthDataPage: React.FC = () => {
         {!selectedYear && !selectedMonth && (
           <div className="text-center py-8 text-gray-500">
             <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p>Select a year and/or month to view data</p>
+            <p>Zgjidh një vit dhe/ose muaj për të parë të dhënat</p>
           </div>
         )}
       </div>
@@ -346,16 +343,16 @@ const YearMonthDataPage: React.FC = () => {
               const Icon = stat.icon;
               const handleClick = () => {
                 switch (stat.name) {
-                  case 'Total Entries':
+                  case 'Hyrje Totale':
                     openAllDataTable();
                     break;
-                  case 'Total Consumption':
+                  case 'Konsumi Total':
                     openConsumptionTable();
                     break;
-                  case 'Active Machinery':
+                  case 'Makineri Aktive':
                     openMachineryTable();
                     break;
-                  case 'Total Refills':
+                  case 'Rimbushje Totale':
                     openPlacesTable();
                     break;
                   default:
@@ -387,17 +384,17 @@ const YearMonthDataPage: React.FC = () => {
           {/* Data Summary */}
           <div className="card">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Data Summary for {selectedYear}{selectedMonth ? ` - ${selectedMonth}` : ''}
+              Përmbledhja e të Dhënave për {selectedYear}{selectedMonth ? ` - ${selectedMonth}` : ''}
             </h3>
             {isLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
-                <p className="text-gray-500 mt-2">Loading data...</p>
+                <p className="text-gray-500 mt-2">Duke ngarkuar të dhënat...</p>
               </div>
             ) : oilData.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <BarChart3 className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                <p>No data found for the selected period</p>
+                <p>Nuk u gjetën të dhëna për periudhën e zgjedhur</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -405,19 +402,19 @@ const YearMonthDataPage: React.FC = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Machinery
+                        Makineri
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Location
+                        Vendndodhja
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Type
+                        Lloji
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount
+                        Sasia
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date & Time
+                        Data & Ora
                       </th>
                     </tr>
                   </thead>
@@ -452,7 +449,7 @@ const YearMonthDataPage: React.FC = () => {
                 </table>
                 {oilData.length > 10 && (
                   <div className="text-center py-4 text-sm text-gray-500">
-                    Showing first 10 entries. Click on stats cards to view all data.
+                    Duke shfaqur 10 hyrjet e para. Kliko në kartat e statistikave për të parë të gjitha të dhënat.
                   </div>
                 )}
               </div>

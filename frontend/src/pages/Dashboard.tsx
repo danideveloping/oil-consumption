@@ -189,33 +189,33 @@ const Dashboard: React.FC = () => {
     
     const allStats = [
       {
-        name: 'Total Machinery',
+        name: 'Makineri Totale',
         value: totalMachinery.toString(),
         icon: Settings,
         color: 'bg-blue-500',
-        change: newMachineryThisMonth > 0 ? `+${newMachineryThisMonth} this month` : 'No new additions'
+        change: newMachineryThisMonth > 0 ? `+${newMachineryThisMonth} këtë muaj` : 'Asnjë shtim i ri'
       },
       {
-        name: 'Active Places',
+        name: 'Vende Aktive',
         value: activePlaces.toString(),
         icon: MapPin,
         color: 'bg-green-500',
-        change: activePlaces > 0 ? 'All operational' : 'No places configured'
+        change: activePlaces > 0 ? 'Të gjitha operacionale' : 'Asnjë vend i konfiguruar'
       },
       {
-        name: 'Monthly Consumption',
+        name: 'Konsumi Mujor',
         value: `${(monthlyConsumption || 0).toFixed(0)}L`,
         icon: Fuel,
         color: 'bg-yellow-500',
-        change: monthlyConsumption > 0 ? 'Last 30 days' : 'No consumption data',
+        change: monthlyConsumption > 0 ? '30 ditët e fundit' : 'Asnjë të dhënë konsumi',
         adminOnly: true
       },
       {
-        name: 'Total Capacity',
+        name: 'Kapaciteti Total',
         value: `${(totalCapacity || 0).toFixed(0)}L`,
         icon: TrendingUp,
         color: 'bg-purple-500',
-        change: totalCapacity > 0 ? `${efficiency}% utilization` : 'No capacity data',
+        change: totalCapacity > 0 ? `${efficiency}% përdorim` : 'Asnjë të dhënë kapaciteti',
         adminOnly: true
       }
     ];
@@ -228,65 +228,65 @@ const Dashboard: React.FC = () => {
   // Functions to open table modals for each stat
   const openMachineryTable = () => {
     const machineryColumns = [
-      { key: 'name', label: 'Name' },
-      { key: 'type', label: 'Type' },
-      { key: 'place_name', label: 'Location' },
+      { key: 'name', label: 'Emri' },
+      { key: 'type', label: 'Tipi' },
+      { key: 'place_name', label: 'Vendndodhja' },
       { 
         key: 'capacity', 
-        label: 'Capacity',
+        label: 'Kapaciteti',
         render: (value: any) => value ? `${value}L` : 'N/A'
       },
-      { key: 'description', label: 'Description' },
+      { key: 'description', label: 'Përshkrimi' },
       { 
         key: 'created_at', 
-        label: 'Created',
+        label: 'Krijuar',
         render: (value: any) => new Date(value).toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'})
       }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: 'All Machinery',
+      title: 'Të Gjitha Makineritë',
       data: machinery,
       columns: machineryColumns,
-      searchPlaceholder: 'Search machinery...'
+      searchPlaceholder: 'Kërko makineri...'
     });
   };
 
   const openPlacesTable = () => {
     const placesColumns = [
-      { key: 'name', label: 'Name' },
-      { key: 'location', label: 'Location' },
-      { key: 'description', label: 'Description' },
+      { key: 'name', label: 'Emri' },
+      { key: 'location', label: 'Vendndodhja' },
+      { key: 'description', label: 'Përshkrimi' },
       { 
         key: 'created_at', 
-        label: 'Created',
+        label: 'Krijuar',
         render: (value: any) => new Date(value).toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'})
       }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: 'All Places',
+      title: 'Të Gjitha Vendet',
       data: places,
       columns: placesColumns,
-      searchPlaceholder: 'Search places...'
+      searchPlaceholder: 'Kërko vende...'
     });
   };
 
   const openConsumptionTable = () => {
     const consumptionData = oilData.filter(entry => entry.type === 'consumption');
     const consumptionColumns = [
-      { key: 'machinery_name', label: 'Machinery' },
-      { key: 'place_name', label: 'Location' },
+      { key: 'machinery_name', label: 'Makineri' },
+      { key: 'place_name', label: 'Vendndodhja' },
       { 
         key: 'litres', 
-        label: 'Amount',
+        label: 'Sasia',
         render: (value: any) => `${value}L`
       },
       { 
         key: 'date', 
-        label: 'Date & Time',
+        label: 'Data & Ora',
         render: (value: any) => {
           const date = new Date(value);
           const dateStr = date.toLocaleDateString('en-US', {timeZone: 'Europe/Tirane'});
@@ -294,37 +294,37 @@ const Dashboard: React.FC = () => {
           return dateStr + timeStr;
         }
       },
-      { key: 'notes', label: 'Notes' }
+      { key: 'notes', label: 'Shënime' }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: 'Monthly Consumption Data',
+      title: 'Të Dhënat e Konsumit Mujor',
       data: consumptionData,
       columns: consumptionColumns,
-      searchPlaceholder: 'Search consumption data...'
+      searchPlaceholder: 'Kërko të dhënat e konsumit...'
     });
   };
 
   const openCapacityTable = () => {
     const capacityColumns = [
-      { key: 'name', label: 'Machinery' },
-      { key: 'type', label: 'Type' },
-      { key: 'place_name', label: 'Location' },
+      { key: 'name', label: 'Makineri' },
+      { key: 'type', label: 'Tipi' },
+      { key: 'place_name', label: 'Vendndodhja' },
       { 
         key: 'capacity', 
-        label: 'Capacity',
+        label: 'Kapaciteti',
         render: (value: any) => value ? `${value}L` : 'N/A'
       },
-      { key: 'description', label: 'Description' }
+      { key: 'description', label: 'Përshkrimi' }
     ];
 
     setStatsTableModal({
       isOpen: true,
-      title: 'Machinery Capacity Overview',
+      title: 'Përmbledhja e Kapacitetit të Makinerisë',
       data: machinery,
       columns: capacityColumns,
-      searchPlaceholder: 'Search machinery capacity...'
+      searchPlaceholder: 'Kërko kapacitetin e makinerisë...'
     });
   };
 
@@ -337,7 +337,7 @@ const Dashboard: React.FC = () => {
       machinery: entry.machinery_name,
       amount: `${entry.litres}L`,
       date: entry.date,
-      place: entry.place_name || 'Unknown Location'
+      place: entry.place_name || 'Vendndodhje e Panjohur'
     }));
 
   const getActivityIcon = (type: string) => {
@@ -370,8 +370,8 @@ const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg p-6 text-white">
-          <h1 className="text-2xl font-bold mb-2">Welcome to Oil Tank Management</h1>
-          <p className="text-primary-100">Loading dashboard data...</p>
+                  <h1 className="text-2xl font-bold mb-2">Mirë se vini në Menaxhimin e Rezervuarëve të Naftës</h1>
+        <p className="text-primary-100">Duke ngarkuar të dhënat e panelit...</p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {[1, 2, 3, 4].map((i) => (
@@ -395,11 +395,11 @@ const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Welcome to Oil Tank Management</h1>
+                        <h1 className="text-2xl font-bold mb-2">Mirë se vini në Menaxhimin e Rezervuarëve të Naftës</h1>
         <p className="text-primary-100">
           {isSuperAdmin() 
-            ? 'Monitor your machinery, track consumption, and optimize operations from your dashboard.'
-            : 'Manage your machinery and places. Add oil entries to track your equipment usage.'
+            ? 'Monitoro makinerinë tënde, gjurmo konsumin dhe optimizo operacionet nga paneli.'
+                          : 'Menaxho makinerinë dhe vendet. Shto hyrje naftë për të gjurmuar përdorimin e pajisjeve.'
           }
         </p>
       </div>
@@ -412,16 +412,16 @@ const Dashboard: React.FC = () => {
           const Icon = stat.icon;
           const handleClick = () => {
             switch (stat.name) {
-              case 'Total Machinery':
+              case 'Makineri Totale':
                 openMachineryTable();
                 break;
-              case 'Active Places':
+              case 'Vende Aktive':
                 openPlacesTable();
                 break;
-              case 'Monthly Consumption':
+              case 'Konsumi Mujor':
                 openConsumptionTable();
                 break;
-              case 'Total Capacity':
+              case 'Kapaciteti Total':
                 openCapacityTable();
                 break;
               default:
@@ -456,12 +456,12 @@ const Dashboard: React.FC = () => {
         <div className="lg:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Aktiviteti i Fundit</h3>
               <button 
                 onClick={() => setIsActivityModalOpen(true)}
                 className="text-primary-600 hover:text-primary-700 text-sm font-medium"
               >
-                View all
+                Shiko të gjitha
               </button>
             </div>
             <div className="space-y-3">
@@ -493,28 +493,28 @@ const Dashboard: React.FC = () => {
         {/* Quick Actions */}
         <div className="space-y-6">
           <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Veprime të Shpejta</h3>
             <div className="space-y-3">
               <button 
                 onClick={() => setIsAddModalOpen(true)}
                 className="w-full btn btn-primary flex items-center justify-center"
               >
                 <Fuel className="h-4 w-4 mr-2" />
-                Add Oil Entry
+                Shto Hyrje Naftë
               </button>
               <button 
                 onClick={() => setIsMachineryModalOpen(true)}
                 className="w-full btn btn-secondary flex items-center justify-center"
               >
                 <Settings className="h-4 w-4 mr-2" />
-                Add Machinery
+                Shto Makineri
               </button>
               <button 
                 onClick={() => setIsPlaceModalOpen(true)}
                 className="w-full btn btn-secondary flex items-center justify-center"
               >
                 <MapPin className="h-4 w-4 mr-2" />
-                Add Place
+                Shto Vend
               </button>
             </div>
           </div>
@@ -524,11 +524,11 @@ const Dashboard: React.FC = () => {
             <div className="card">
               <div className="flex items-center mb-4">
                 <Calendar className="h-5 w-5 text-gray-400 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">This Month</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Ky Muaj</h3>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Total Consumption</span>
+                  <span className="text-sm text-gray-600">Konsumi Total</span>
                   <span className="text-sm font-medium">
                     {(oilData
                       .filter(entry => entry.type === 'consumption')
@@ -539,17 +539,17 @@ const Dashboard: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Active Machinery</span>
+                  <span className="text-sm text-gray-600">Makineri Aktive</span>
                   <span className="text-sm font-medium">{machinery.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Refills</span>
+                  <span className="text-sm text-gray-600">Rimbushje</span>
                   <span className="text-sm font-medium">
                     {oilData.filter(entry => entry.type === 'refill').length}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Maintenance</span>
+                  <span className="text-sm text-gray-600">Mirëmbajtje</span>
                   <span className="text-sm font-medium">
                     {oilData.filter(entry => entry.type === 'maintenance').length}
                   </span>

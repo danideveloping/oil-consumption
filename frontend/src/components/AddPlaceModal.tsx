@@ -27,13 +27,13 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
   const onSubmit = async (data: PlaceFormData) => {
     try {
       await placesAPI.create(data);
-      toast.success('Place added successfully!');
+      toast.success('Vendi u shtua me sukses!');
       reset();
       onSuccess();
       onClose();
     } catch (error: any) {
       console.error('Error adding place:', error);
-      toast.error(error.response?.data?.message || 'Failed to add place');
+      toast.error(error.response?.data?.message || 'Dështoi shtimi i vendit');
     }
   };
 
@@ -49,7 +49,7 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
       <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Add New Place</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Shto Vend të Ri</h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -63,18 +63,18 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
           {/* Place Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Place Name *
+              Emri i Vendit *
             </label>
             <input
               type="text"
               id="name"
               className="input w-full"
-              placeholder="e.g., Warehouse A, Construction Site"
+              placeholder="p.sh., Magazina A, Kantieri i Ndërtimit"
               {...register('name', {
-                required: 'Place name is required',
+                required: 'Emri i vendit është i detyrueshëm',
                 minLength: {
                   value: 2,
-                  message: 'Place name must be at least 2 characters'
+                  message: 'Emri i vendit duhet të ketë të paktën 2 karaktere'
                 }
               })}
             />
@@ -86,13 +86,13 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
           {/* Location */}
           <div>
             <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-              Location
+              Vendndodhja
             </label>
             <input
               type="text"
               id="location"
               className="input w-full"
-              placeholder="e.g., Downtown, Industrial Zone"
+              placeholder="p.sh., Qendra e Qytetit, Zona Industriale"
               {...register('location')}
             />
             {errors.location && (
@@ -103,13 +103,13 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
           {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description
+              Përshkrimi
             </label>
             <textarea
               id="description"
               rows={3}
               className="input w-full resize-none"
-              placeholder="Additional details about this place..."
+              placeholder="Detaje shtesë për këtë vend..."
               {...register('description')}
             />
             {errors.description && (
@@ -125,14 +125,14 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ isOpen, onClose, onSucces
               className="flex-1 btn btn-secondary"
               disabled={isSubmitting}
             >
-              Cancel
+              Anulo
             </button>
             <button
               type="submit"
               className="flex-1 btn btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding...' : 'Add Place'}
+              {isSubmitting ? 'Duke shtuar...' : 'Shto Vend'}
             </button>
           </div>
         </form>

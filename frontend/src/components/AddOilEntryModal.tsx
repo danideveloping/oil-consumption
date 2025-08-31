@@ -48,7 +48,7 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
       const response = await machineryAPI.getAll();
       setMachinery(response.data);
     } catch (error) {
-      toast.error('Failed to load machinery');
+      toast.error('Dështoi ngarkimi i makinerisë');
       console.error('Error loading machinery:', error);
     } finally {
       setIsLoadingMachinery(false);
@@ -76,12 +76,12 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
       };
       
       await dataAPI.create(submissionData);
-      toast.success('Oil entry added successfully!');
+      toast.success('Hyrja e naftës u shtua me sukses!');
       reset();
       onSuccess();
       onClose();
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Failed to add oil entry';
+      const message = error.response?.data?.message || 'Dështoi shtimi i hyrjes së naftës';
       toast.error(message);
       console.error('Error adding oil entry:', error);
     } finally {
@@ -113,7 +113,7 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
               <div className="bg-primary-100 p-2 rounded-lg mr-3">
                 <Fuel className="h-5 w-5 text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Add Oil Entry</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Shto Hyrje Naftë</h3>
             </div>
             <button
               onClick={handleClose}
@@ -128,7 +128,7 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
             {/* Machinery Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Machinery *
+                Makineri *
               </label>
               {isLoadingMachinery ? (
                 <div className="flex items-center justify-center py-8">
@@ -137,12 +137,12 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
               ) : (
                 <select
                   {...register('machinery_id', {
-                    required: 'Please select machinery',
+                    required: 'Ju lutem zgjidhni makineri',
                     valueAsNumber: true,
                   })}
                   className="input"
                 >
-                  <option value="">Select machinery...</option>
+                  <option value="">Zgjidh makineri...</option>
                   {machinery.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name} - {item.type} {item.place_name && `(${item.place_name})`}
@@ -155,27 +155,25 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
               )}
             </div>
 
-
-
             {/* Litres */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Litres *
+                Litra *
               </label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 {...register('litres', {
-                  required: 'Litres is required',
+                  required: 'Litra është e detyrueshme',
                   valueAsNumber: true,
                   min: {
                     value: 0,
-                    message: 'Litres must be positive',
+                    message: 'Litra duhet të jenë pozitive',
                   },
                 })}
                 className="input"
-                placeholder="Enter litres consumed/refilled"
+                placeholder="Shkruaj litrat e konsumuar/plotësuar"
               />
               {errors.litres && (
                 <p className="mt-1 text-sm text-red-600">{errors.litres.message}</p>
@@ -185,17 +183,17 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
             {/* Type */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Entry Type *
+                Lloji i Hyrjes *
               </label>
               <select
                 {...register('type', {
-                  required: 'Entry type is required',
+                  required: 'Lloji i hyrjes është i detyrueshëm',
                 })}
                 className="input"
               >
-                <option value="consumption">Consumption</option>
-                <option value="refill">Refill</option>
-                <option value="maintenance">Maintenance</option>
+                <option value="consumption">Konsum</option>
+                <option value="refill">Plotësim</option>
+                <option value="maintenance">Mirëmbajtje</option>
               </select>
               {errors.type && (
                 <p className="mt-1 text-sm text-red-600">{errors.type.message}</p>
@@ -205,13 +203,13 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
             {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Notes (Optional)
+                Shënime (Opsionale)
               </label>
               <textarea
                 {...register('notes')}
                 rows={3}
                 className="input resize-none"
-                placeholder="Add any additional notes..."
+                placeholder="Shto shënime shtesë..."
               />
             </div>
 
@@ -223,7 +221,7 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
                 className="w-full sm:w-auto btn btn-secondary"
                 disabled={isSubmitting}
               >
-                Cancel
+                Anulo
               </button>
               <button
                 type="submit"
@@ -233,12 +231,12 @@ const AddOilEntryModal: React.FC<AddOilEntryModalProps> = ({ isOpen, onClose, on
                 {isSubmitting ? (
                   <>
                     <LoadingSpinner size="sm" className="mr-2" />
-                    Adding...
+                    Duke shtuar...
                   </>
                 ) : (
                   <>
                     <Fuel className="h-4 w-4 mr-2" />
-                    Add Entry
+                    Shto Hyrje
                   </>
                 )}
               </button>

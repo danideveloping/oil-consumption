@@ -57,7 +57,7 @@ const PastMonthsData: React.FC<PastMonthsDataProps> = ({ selectedMonth }) => {
       setMonthlyData(monthlyResponse.data || []);
     } catch (error) {
       console.error('Error loading month data:', error);
-      toast.error('Failed to load month data');
+      toast.error('Dështoi ngarkimi i të dhënave të muajit');
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +116,7 @@ const PastMonthsData: React.FC<PastMonthsDataProps> = ({ selectedMonth }) => {
     const dataToExport = activeTab === 'daily' ? filteredDailyData : filteredMonthlyData;
     
     if (dataToExport.length === 0) {
-      toast.error('No data to export');
+      toast.error('Asnjë të dhënë për eksportim');
       return;
     }
 
@@ -169,7 +169,7 @@ const PastMonthsData: React.FC<PastMonthsDataProps> = ({ selectedMonth }) => {
     const dataToExport = activeTab === 'daily' ? filteredDailyData : filteredMonthlyData;
     
     if (dataToExport.length === 0) {
-      toast.error('No data to export');
+      toast.error('Asnjë të dhënë për eksportim');
       return;
     }
 

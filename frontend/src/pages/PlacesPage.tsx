@@ -38,15 +38,15 @@ const PlacesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Places Management</h1>
-          <p className="text-sm sm:text-base text-gray-600">Manage locations where your machinery is stationed</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Menaxhimi i Vendeve</h1>
+          <p className="text-sm sm:text-base text-gray-600">Menaxho vendndodhjet ku është vendosur makineri</p>
         </div>
         <button 
           onClick={() => setIsAddModalOpen(true)}
           className="btn btn-primary flex items-center justify-center w-full sm:w-auto"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add Place
+          Shto Vend
         </button>
       </div>
 
@@ -58,7 +58,7 @@ const PlacesPage: React.FC = () => {
               <MapPin className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Places</p>
+              <p className="text-sm font-medium text-gray-600">Vende Totale</p>
               <p className="text-2xl font-bold text-gray-900">{places.length}</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ const PlacesPage: React.FC = () => {
               <Settings className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Machinery</p>
+              <p className="text-sm font-medium text-gray-600">Makineri Totale</p>
               <p className="text-2xl font-bold text-gray-900">
                 {places.length}
               </p>
@@ -84,7 +84,7 @@ const PlacesPage: React.FC = () => {
               <MapPin className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Active Locations</p>
+              <p className="text-sm font-medium text-gray-600">Vendndodhje Aktive</p>
               <p className="text-2xl font-bold text-gray-900">{places.length}</p>
             </div>
           </div>
@@ -96,11 +96,11 @@ const PlacesPage: React.FC = () => {
       {/* Places Table */}
       <div className="card">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">All Places</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Të Gjitha Vendet</h2>
           <div className="flex space-x-2">
             <input
               type="text"
-              placeholder="Search places..."
+              placeholder="Kërko vende..."
               className="input w-full sm:w-64"
             />
           </div>
@@ -111,10 +111,10 @@ const PlacesPage: React.FC = () => {
             <table className="table min-w-full">
               <thead>
                 <tr>
-                  <th className="text-xs sm:text-sm">Name</th>
-                  <th className="text-xs sm:text-sm hidden sm:table-cell">Location</th>
-                  <th className="text-xs sm:text-sm hidden lg:table-cell">Description</th>
-                  <th className="text-xs sm:text-sm">Machinery Count</th>
+                  <th className="text-xs sm:text-sm">Emri</th>
+                  <th className="text-xs sm:text-sm hidden sm:table-cell">Vendndodhja</th>
+                  <th className="text-xs sm:text-sm hidden lg:table-cell">Përshkrimi</th>
+                  <th className="text-xs sm:text-sm">Numri i Makinerisë</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,7 +135,7 @@ const PlacesPage: React.FC = () => {
                     <td className="hidden lg:table-cell text-gray-600 text-xs sm:text-sm">{place.description}</td>
                     <td>
                       <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                        {place.id} machines
+                        {place.id} makineri
                       </span>
                     </td>
                   </tr>

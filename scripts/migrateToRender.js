@@ -101,7 +101,6 @@ function createInitScript(migrationDir) {
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
-  email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   role VARCHAR(50) DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -143,8 +142,8 @@ CREATE INDEX IF NOT EXISTS idx_machinery_place_id ON machinery(place_id);
 -- Insert sample data (optional)
 -- You can replace this with your actual data from the migration files
 
-INSERT INTO users (username, email, password_hash, role) VALUES 
-('admin', 'admin@example.com', '$2b$10$your_hashed_password_here', 'admin')
+INSERT INTO users (username, password_hash, role) VALUES 
+('admin', '$2b$10$your_hashed_password_here', 'admin')
 ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO places (name, location, description) VALUES 

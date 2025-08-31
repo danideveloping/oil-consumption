@@ -63,7 +63,7 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
       setPlaces(response.data || []);
     } catch (error) {
       console.error('Error fetching places:', error);
-      toast.error('Failed to load places');
+      toast.error('Dështoi ngarkimi i vendeve');
     } finally {
       setLoadingPlaces(false);
     }
@@ -91,18 +91,18 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
       );
 
       if (isDuplicate) {
-        toast.error(`A machinery with the name "${cleanData.name}" already exists at "${selectedPlace?.name}". Please choose a different name or location.`);
+        toast.error(`Një makineri me emrin "${cleanData.name}" ekziston tashmë në "${selectedPlace?.name}". Ju lutem zgjidhni një emër tjetër ose vendndodhje.`);
         return;
       }
 
       await machineryAPI.update(machinery.id, cleanData);
-      toast.success('Machinery updated successfully!');
+      toast.success('Makineri u përditësua me sukses!');
       reset();
       onSuccess();
       onClose();
     } catch (error: any) {
       console.error('Error updating machinery:', error);
-      toast.error(error.response?.data?.message || 'Failed to update machinery');
+      toast.error(error.response?.data?.message || 'Dështoi përditësimi i makinerisë');
     }
   };
 
@@ -114,13 +114,16 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
   if (!isOpen || !machinery) return null;
 
   const machineryTypes = [
-    'Heavy Equipment',
-    'Lifting Equipment',
-    'Power Generation',
-    'Transportation',
-    'Construction Equipment',
-    'Agricultural Equipment',
-    'Other'
+    'Pajisje e Rëndë',
+    'Ekskavator',
+    'Buldozer',
+    'Ngarkues',
+    'Kami',
+    'Traktor',
+    'Kompresor',
+    'Gjenerator',
+    'Pompë',
+    'Tjetër'
   ];
 
   return (
@@ -128,7 +131,7 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Edit Machinery</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Redakto Makineri</h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -142,18 +145,18 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
           {/* Machinery Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Machinery Name *
+              Emri i Makinerisë *
             </label>
             <input
               type="text"
               id="name"
               className="input w-full"
-              placeholder="e.g., Excavator #3, Generator #1"
+              placeholder="p.sh., Ekskavator #3, Gjenerator #1"
               {...register('name', {
-                required: 'Machinery name is required',
+                required: 'Emri i makinerisë është i detyrueshëm',
                 minLength: {
                   value: 2,
-                  message: 'Machinery name must be at least 2 characters'
+                  message: 'Emri i makinerisë duhet të ketë të paktën 2 karaktere'
                 }
               })}
             />
@@ -165,14 +168,14 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
           {/* Machinery Type */}
           <div>
             <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-              Type
+              Tipi
             </label>
             <select
               id="type"
               className="input w-full"
               {...register('type')}
             >
-              <option value="">Select machinery type</option>
+              <option value="">Zgjidh tipin e makinerisë</option>
               {machineryTypes.map((type) => (
                 <option key={type} value={type}>
                   {type}
@@ -187,21 +190,21 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
           {/* Place */}
           <div>
             <label htmlFor="place_id" className="block text-sm font-medium text-gray-700 mb-1">
-              Location *
+              Vendndodhja *
             </label>
             {loadingPlaces ? (
               <div className="input w-full bg-gray-50 flex items-center justify-center">
-                Loading places...
+                Duke ngarkuar vendet...
               </div>
             ) : (
               <select
                 id="place_id"
                 className="input w-full"
                 {...register('place_id', {
-                  required: 'Please select a location'
+                  required: 'Ju lutem zgjidhni një vendndodhje'
                 })}
               >
-                <option value="">Select location</option>
+                <option value="">Zgjidh vendndodhjen</option>
                 {places.map((place) => (
                   <option key={place.id} value={place.id}>
                     {place.name} {place.location ? `(${place.location})` : ''}
@@ -217,7 +220,7 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
           {/* Capacity */}
           <div>
             <label htmlFor="capacity" className="block text-sm font-medium text-gray-700 mb-1">
-              Oil Capacity (Litres)
+              Kapaciteti i Naftës (Litra)
             </label>
             <input
               type="number"
@@ -225,11 +228,11 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
               step="0.1"
               min="0"
               className="input w-full"
-              placeholder="e.g., 50.5"
+              placeholder="p.sh., 50.5"
               {...register('capacity', {
                 min: {
                   value: 0,
-                  message: 'Capacity must be positive'
+                  message: 'Kapaciteti duhet të jetë pozitiv'
                 },
                 valueAsNumber: true
               })}
@@ -242,13 +245,13 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
           {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description
+              Përshkrimi
             </label>
             <textarea
               id="description"
               rows={3}
               className="input w-full resize-none"
-              placeholder="Additional details about this machinery..."
+              placeholder="Detaje shtesë për këtë makineri..."
               {...register('description')}
             />
             {errors.description && (
@@ -264,14 +267,14 @@ const EditMachineryModal: React.FC<EditMachineryModalProps> = ({
               className="flex-1 btn btn-secondary"
               disabled={isSubmitting}
             >
-              Cancel
+              Anulo
             </button>
             <button
               type="submit"
               className="flex-1 btn btn-primary"
               disabled={isSubmitting || loadingPlaces}
             >
-              {isSubmitting ? 'Updating...' : 'Update Machinery'}
+              {isSubmitting ? 'Duke përditësuar...' : 'Përditëso Makineri'}
             </button>
           </div>
         </form>

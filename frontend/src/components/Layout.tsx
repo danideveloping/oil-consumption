@@ -25,12 +25,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: Home },
-    { name: 'Year/Month Data', href: '/year-month-data', icon: Calendar },
-    { name: 'Machinery', href: '/machinery', icon: Settings },
-    { name: 'Places', href: '/places', icon: MapPin },
+    { name: 'Paneli', href: '/', icon: Home },
+    { name: 'Të Dhënat Vjetore/Mujore', href: '/year-month-data', icon: Calendar },
+    { name: 'Makineri', href: '/machinery', icon: Settings },
+    { name: 'Vende', href: '/places', icon: MapPin },
     ...(isSuperAdmin() ? [
-      { name: 'Data & Reports', href: '/data', icon: BarChart3 }
+      { name: 'Të Dhënat & Raportet', href: '/data', icon: BarChart3 }
     ] : []),
   ];
 
@@ -69,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Fuel className="h-6 w-6 text-white" />
             </div>
             <span className="ml-3 text-lg font-semibold text-gray-900">
-              Oil Tank Manager
+              Menaxhuesi i Rezervuarëve të Naftës
             </span>
           </div>
           <button
@@ -88,7 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-900">{user?.username}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
+              <p className="text-xs text-gray-500">Përdorues</p>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors"
           >
             <LogOut className="mr-3 h-5 w-5" />
-            Sign out
+            Dil
           </button>
         </div>
       </div>
@@ -150,13 +150,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex-1 px-4 flex justify-between items-center">
             <div className="flex-1 flex">
               <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 truncate">
-                {navigation.find(item => isCurrentPath(item.href))?.name || 'Dashboard'}
+                {navigation.find(item => isCurrentPath(item.href))?.name || 'Paneli'}
               </h1>
             </div>
             
             <div className="ml-2 sm:ml-4 flex items-center">
               <div className="text-xs sm:text-sm text-gray-600 hidden sm:block">
-                Welcome back, <span className="font-medium">{user?.username}</span>
+                Mirë se u ktheve, <span className="font-medium">{user?.username}</span>
               </div>
               <div className="text-xs text-gray-600 sm:hidden">
                 <span className="font-medium">{user?.username}</span>

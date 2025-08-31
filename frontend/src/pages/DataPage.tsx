@@ -82,7 +82,7 @@ const DataPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error loading data:', error);
-      toast.error('Failed to load data');
+      toast.error('Dështoi ngarkimi i të dhënave');
     } finally {
       setIsLoading(false);
     }
@@ -149,7 +149,7 @@ const DataPage: React.FC = () => {
     const dataToExport = activeTab === 'daily' ? filteredDailyData : currentMonthlyData;
     
     if (dataToExport.length === 0) {
-      toast.error('No data to export');
+      toast.error('Asnjë të dhënë për eksportim');
       return;
     }
 
@@ -194,7 +194,7 @@ const DataPage: React.FC = () => {
     link.click();
     document.body.removeChild(link);
     
-    toast.success('CSV exported successfully');
+    toast.success('CSV u eksportua me sukses');
     setIsExportDropdownOpen(false);
   };
 
@@ -202,7 +202,7 @@ const DataPage: React.FC = () => {
     const dataToExport = activeTab === 'daily' ? filteredDailyData : currentMonthlyData;
     
     if (dataToExport.length === 0) {
-      toast.error('No data to export');
+      toast.error('Asnjë të dhënë për eksportim');
       return;
     }
 
@@ -248,7 +248,7 @@ const DataPage: React.FC = () => {
     link.click();
     document.body.removeChild(link);
     
-    toast.success('Excel file exported successfully');
+    toast.success('Skedari Excel u eksportua me sukses');
     setIsExportDropdownOpen(false);
   };
 
@@ -258,12 +258,12 @@ const DataPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-            {isSuperAdmin() ? 'Data & Reports' : 'Current Month Data'}
+            {isSuperAdmin() ? 'Të Dhënat & Raportet' : 'Të Dhënat e Muajit Aktual'}
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
             {isSuperAdmin() 
-              ? 'View daily and monthly oil consumption data and reports'
-              : 'View current month oil consumption data'
+              ? 'Shiko të dhënat dhe raportet ditore dhe mujore të konsumit të naftës'
+              : 'Shiko të dhënat e konsumit të naftës të muajit aktual'
             }
           </p>
         </div>
@@ -274,7 +274,7 @@ const DataPage: React.FC = () => {
             className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
           >
             <Settings className="h-4 w-4 mr-2" />
-            Central Tank
+            Rezervuari Qendror
           </button>
           
           {/* Individual Tank Analysis Button */}
@@ -283,7 +283,7 @@ const DataPage: React.FC = () => {
             className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
           >
             <Fuel className="h-4 w-4 mr-2" />
-            Individual Tanks
+            Rezervuarët Individualë
           </button>
           
           {/* Export Dropdown */}
@@ -293,7 +293,7 @@ const DataPage: React.FC = () => {
               className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
             >
               <Download className="h-4 w-4 mr-2" />
-              Export
+              Eksporto
               <ChevronDown className="h-4 w-4 ml-2" />
             </button>
             
@@ -305,14 +305,14 @@ const DataPage: React.FC = () => {
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    Export as CSV
+                    Eksporto si CSV
                   </button>
                   <button
                     onClick={exportToExcel}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
-                    Export as Excel
+                    Eksporto si Excel
                   </button>
                 </div>
               </div>
@@ -324,7 +324,7 @@ const DataPage: React.FC = () => {
             className="btn btn-primary flex items-center justify-center w-full sm:w-auto"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Entry
+            Shto Hyrje
           </button>
         </div>
       </div>
@@ -334,8 +334,8 @@ const DataPage: React.FC = () => {
         <div className="card">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Select Month</h2>
-              <p className="text-sm text-gray-600">Choose a month to view historical data</p>
+              <h2 className="text-lg font-semibold text-gray-900">Zgjidh Muajin</h2>
+              <p className="text-sm text-gray-600">Zgjidh një muaj për të parë të dhënat historike</p>
             </div>
             
             <div className="relative month-selector">
@@ -352,7 +352,7 @@ const DataPage: React.FC = () => {
                     timeZone: 'Europe/Tirane'
                   });
                   return monthName;
-                })() : 'Select Month'}
+                })() : 'Zgjidh Muajin'}
                 <ChevronDown className="h-4 w-4 ml-2" />
               </button>
               
@@ -360,7 +360,7 @@ const DataPage: React.FC = () => {
                 <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                   <div className="p-4">
                     <div className="mb-4">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">CURRENT PERIOD:</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">PERIUDHA AKTUALE:</h3>
                       <div className="flex items-center p-2 bg-gray-50 border rounded">
                         <Calendar className="h-4 w-4 text-gray-400 mr-2" />
                         <span className="text-sm text-gray-700">
@@ -374,7 +374,7 @@ const DataPage: React.FC = () => {
                     </div>
                     
                     <div className="mb-4">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">SELECT YEAR:</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">ZGJIDH VITIN:</h3>
                       <div className="grid grid-cols-3 gap-1">
                         {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((year) => (
                           <button
@@ -393,13 +393,13 @@ const DataPage: React.FC = () => {
                     </div>
                     
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">SELECT MONTH:</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">ZGJIDH MUAJIN:</h3>
                       <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto">
-                        {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
+                        {['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].map((month) => (
                           <button
                             key={month}
                             onClick={() => {
-                              const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(month) + 1;
+                              const monthNum = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].indexOf(month) + 1;
                               const currentYear = new Date().getFullYear();
                               setSelectedMonth(`${currentYear}-${monthNum.toString().padStart(2, '0')}`);
                               setIsMonthSelectorOpen(false);
@@ -413,7 +413,7 @@ const DataPage: React.FC = () => {
                     </div>
                     
                     <div className="mt-4 pt-4 border-t">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">CUSTOM SELECTION:</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">ZGJIDHJA PERSONALIZUAR:</h3>
                       <div className="space-y-2">
                         <div className="flex space-x-2">
                           <select 
@@ -422,20 +422,20 @@ const DataPage: React.FC = () => {
                               const selectedMonth = e.target.value;
                               const currentYear = new Date().getFullYear();
                               if (selectedMonth) {
-                                const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(selectedMonth) + 1;
+                                const monthNum = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].indexOf(selectedMonth) + 1;
                                 setSelectedMonth(`${currentYear}-${monthNum.toString().padStart(2, '0')}`);
                                 setIsMonthSelectorOpen(false);
                               }
                             }}
                           >
-                            <option value="">Select Month</option>
-                            {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
+                            <option value="">Zgjidh Muajin</option>
+                            {['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].map((month) => (
                               <option key={month} value={month}>{month}</option>
                             ))}
                           </select>
                           <input
                             type="number"
-                            placeholder="Year"
+                            placeholder="Viti"
                             min="2020"
                             max="2030"
                             defaultValue={new Date().getFullYear()}
@@ -445,7 +445,7 @@ const DataPage: React.FC = () => {
                                 const year = e.currentTarget.value;
                                 const monthSelect = e.currentTarget.parentElement?.querySelector('select') as HTMLSelectElement;
                                 if (year && monthSelect.value) {
-                                  const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(monthSelect.value) + 1;
+                                  const monthNum = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].indexOf(monthSelect.value) + 1;
                                   setSelectedMonth(`${year}-${monthNum.toString().padStart(2, '0')}`);
                                   setIsMonthSelectorOpen(false);
                                 }
@@ -458,40 +458,40 @@ const DataPage: React.FC = () => {
                             const monthSelect = document.querySelector('.month-selector select') as HTMLSelectElement;
                             const yearInput = document.querySelector('.month-selector input[type="number"]') as HTMLInputElement;
                             if (monthSelect?.value && yearInput?.value) {
-                              const monthNum = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(monthSelect.value) + 1;
+                              const monthNum = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'].indexOf(monthSelect.value) + 1;
                               setSelectedMonth(`${yearInput.value}-${monthNum.toString().padStart(2, '0')}`);
                               setIsMonthSelectorOpen(false);
                             }
                           }}
                           className="w-full px-3 py-1 text-sm bg-primary-600 text-white rounded hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
                         >
-                          Apply Selection
+                          Apliko Zgjedhjen
                         </button>
                       </div>
                     </div>
                     
                     <div className="mt-4 pt-4 border-t">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">QUICK SELECTIONS:</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-2">ZGJIDHJET E SHPEJTA:</h3>
                       <div className="space-y-1">
                         {(() => {
                           const currentYear = new Date().getFullYear();
                           // const currentMonth = new Date().getMonth();
-                          // const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                          // const months = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'];
                           
                           return [
-                            { year: currentYear - 1, month: 12, label: 'December 2024' },
-                            { year: currentYear, month: 1, label: 'January 2025' },
-                            { year: currentYear, month: 2, label: 'February 2025' },
-                            { year: currentYear, month: 3, label: 'March 2025' },
-                            { year: currentYear, month: 4, label: 'April 2025' },
-                            { year: currentYear, month: 5, label: 'May 2025' },
-                            { year: currentYear, month: 6, label: 'June 2025' },
-                            { year: currentYear, month: 7, label: 'July 2025' },
-                            { year: currentYear, month: 8, label: 'August 2025' },
-                            { year: currentYear, month: 9, label: 'September 2025' },
-                            { year: currentYear, month: 10, label: 'October 2025' },
-                            { year: currentYear, month: 11, label: 'November 2025' },
-                            { year: currentYear, month: 12, label: 'December 2025' },
+                            { year: currentYear - 1, month: 12, label: 'Dhjetor 2024' },
+                            { year: currentYear, month: 1, label: 'Janar 2025' },
+                            { year: currentYear, month: 2, label: 'Shkurt 2025' },
+                            { year: currentYear, month: 3, label: 'Mars 2025' },
+                            { year: currentYear, month: 4, label: 'Prill 2025' },
+                            { year: currentYear, month: 5, label: 'Maj 2025' },
+                            { year: currentYear, month: 6, label: 'Qershor 2025' },
+                            { year: currentYear, month: 7, label: 'Korrik 2025' },
+                            { year: currentYear, month: 8, label: 'Gusht 2025' },
+                            { year: currentYear, month: 9, label: 'Shtator 2025' },
+                            { year: currentYear, month: 10, label: 'Tetor 2025' },
+                            { year: currentYear, month: 11, label: 'Nëntor 2025' },
+                            { year: currentYear, month: 12, label: 'Dhjetor 2025' },
                           ].map((item) => (
                             <button
                               key={item.label}
@@ -554,7 +554,7 @@ const DataPage: React.FC = () => {
                   <BarChart3 className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Entries</p>
+                  <p className="text-sm font-medium text-gray-600">Hyrje Totale</p>
                   <p className="text-2xl font-bold text-gray-900">{filteredDailyData.length}</p>
                 </div>
               </div>
@@ -566,7 +566,7 @@ const DataPage: React.FC = () => {
                   <Calendar className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Active Days</p>
+                  <p className="text-sm font-medium text-gray-600">Ditë Aktive</p>
                   <p className="text-2xl font-bold text-gray-900">{activeDays}</p>
                 </div>
               </div>
@@ -586,7 +586,7 @@ const DataPage: React.FC = () => {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    Daily Data
+                    Të Dhënat Ditore
                   </button>
                   <button
                     onClick={() => setActiveTab('monthly')}
@@ -596,13 +596,13 @@ const DataPage: React.FC = () => {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    Monthly Summary
+                    Përmbledhja Mujore
                   </button>
                 </div>
               ) : (
                 <div className="flex space-x-1 w-full sm:w-auto">
                   <div className="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg font-medium bg-primary-100 text-primary-700 text-sm sm:text-base">
-                    Current Month Data
+                    Të Dhënat e Muajit Aktual
                   </div>
                 </div>
               )}
@@ -613,14 +613,14 @@ const DataPage: React.FC = () => {
                   className="input w-full sm:w-auto"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  placeholder="Select date"
+                  placeholder="Zgjidh datën"
                 />
                 {selectedDate && (
                   <button 
                     onClick={() => setSelectedDate('')}
                     className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
                   >
-                    Clear Filter
+                    Pastro Filtri
                   </button>
                 )}
               </div>
@@ -639,12 +639,12 @@ const DataPage: React.FC = () => {
                     <table className="table min-w-full">
                     <thead>
                       <tr>
-                        <th className="text-xs sm:text-sm">Date</th>
-                        <th className="text-xs sm:text-sm">Machinery</th>
-                        <th className="text-xs sm:text-sm hidden sm:table-cell">Type</th>
-                        <th className="text-xs sm:text-sm">Place</th>
-                        <th className="text-xs sm:text-sm">Litres</th>
-                        <th className="text-xs sm:text-sm">Entry Type</th>
+                        <th className="text-xs sm:text-sm">Data</th>
+                        <th className="text-xs sm:text-sm">Makineri</th>
+                        <th className="text-xs sm:text-sm hidden sm:table-cell">Tipi</th>
+                        <th className="text-xs sm:text-sm">Vendi</th>
+                        <th className="text-xs sm:text-sm">Litrat</th>
+                        <th className="text-xs sm:text-sm">Tipi i Hyrjes</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -700,12 +700,12 @@ const DataPage: React.FC = () => {
                     <table className="table min-w-full">
                     <thead>
                       <tr>
-                        <th className="text-xs sm:text-sm">Month</th>
-                        <th className="text-xs sm:text-sm">Machinery</th>
-                        <th className="text-xs sm:text-sm hidden md:table-cell">Place</th>
-                        <th className="text-xs sm:text-sm">Total Litres</th>
-                        <th className="text-xs sm:text-sm hidden sm:table-cell">Daily Average</th>
-                        <th className="text-xs sm:text-sm hidden lg:table-cell">Records</th>
+                        <th className="text-xs sm:text-sm">Muaji</th>
+                        <th className="text-xs sm:text-sm">Makineri</th>
+                        <th className="text-xs sm:text-sm hidden md:table-cell">Vendi</th>
+                        <th className="text-xs sm:text-sm">Litrat Totale</th>
+                        <th className="text-xs sm:text-sm hidden sm:table-cell">Mesatarja Ditore</th>
+                        <th className="text-xs sm:text-sm hidden lg:table-cell">Regjistrimet</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -729,7 +729,7 @@ const DataPage: React.FC = () => {
                           </td>
                           <td className="hidden lg:table-cell">
                             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                              {item.record_count} entries
+                              {item.record_count} hyrje
                             </span>
                           </td>
                         </tr>

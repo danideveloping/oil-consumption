@@ -7,7 +7,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 interface RegisterFormData {
   username: string;
-  email: string;
   password: string;
   confirmPassword: string;
 }
@@ -27,7 +26,7 @@ const RegisterPage: React.FC = () => {
   const password = watch('password');
 
   const onSubmit = async (data: RegisterFormData) => {
-    await registerUser(data.username, data.email, data.password);
+    await registerUser(data.username, data.password);
   };
 
   return (
@@ -40,10 +39,10 @@ const RegisterPage: React.FC = () => {
             </div>
           </div>
           <h2 className="mt-6 text-center text-2xl sm:text-3xl font-bold text-gray-900">
-            Create Account
+            Krijo Llogari
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Join the Oil Tank Management System
+                          Bashkohu me Sistemin e Menaxhimit të Rezervuarëve të Naftës
           </p>
         </div>
         
@@ -51,21 +50,21 @@ const RegisterPage: React.FC = () => {
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
+                Emri i përdoruesit
               </label>
               <div className="mt-1 relative">
                 <input
                   {...register('username', {
-                    required: 'Username is required',
+                    required: 'Emri i përdoruesit është i detyrueshëm',
                     minLength: {
                       value: 3,
-                      message: 'Username must be at least 3 characters',
+                      message: 'Emri i përdoruesit duhet të ketë të paktën 3 karaktere',
                     },
                   })}
                   type="text"
                   autoComplete="username"
                   className="input pl-10"
-                  placeholder="Enter your username"
+                  placeholder="Shkruaj emrin tënd të përdoruesit"
                 />
                 <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 {errors.username && (
@@ -74,47 +73,25 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  {...register('email', {
-                    required: 'Email is required',
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: 'Please enter a valid email address',
-                    },
-                  })}
-                  type="email"
-                  autoComplete="email"
-                  className="input"
-                  placeholder="Enter your email"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                )}
-              </div>
-            </div>
+
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                Fjalëkalimi
               </label>
               <div className="mt-1 relative">
                 <input
                   {...register('password', {
-                    required: 'Password is required',
+                    required: 'Fjalëkalimi është i detyrueshëm',
                     minLength: {
                       value: 6,
-                      message: 'Password must be at least 6 characters',
+                      message: 'Fjalëkalimi duhet të ketë të paktën 6 karaktere',
                     },
                   })}
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   className="input pr-10"
-                  placeholder="Enter your password"
+                  placeholder="Shkruaj fjalëkalimin tënd"
                 />
                 <button
                   type="button"
@@ -135,19 +112,19 @@ const RegisterPage: React.FC = () => {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                Konfirmo Fjalëkalimin
               </label>
               <div className="mt-1 relative">
                 <input
                   {...register('confirmPassword', {
-                    required: 'Please confirm your password',
+                    required: 'Ju lutem konfirmoni fjalëkalimin',
                     validate: (value) =>
-                      value === password || 'Passwords do not match',
+                      value === password || 'Fjalëkalimet nuk përputhen',
                   })}
                   type={showConfirmPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   className="input pr-10"
-                  placeholder="Confirm your password"
+                  placeholder="Konfirmo fjalëkalimin tënd"
                 />
                 <button
                   type="button"
@@ -175,22 +152,22 @@ const RegisterPage: React.FC = () => {
                 {isLoading ? (
                   <>
                     <LoadingSpinner size="sm" className="mr-2" />
-                    Creating account...
+                    Duke krijuar llogarinë...
                   </>
                 ) : (
-                  'Create account'
+                  'Krijo llogarinë'
                 )}
               </button>
             </div>
 
             <div className="text-center">
               <p className="text-sm text-gray-600">
-                Already have an account?{' '}
+                Ke tashmë një llogari?{' '}
                 <Link
                   to="/login"
                   className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
                 >
-                  Sign in
+                  Hyr
                 </Link>
               </p>
             </div>

@@ -105,9 +105,9 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Recent Activity</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Aktivitetet e Fundit</h2>
             <p className="text-sm text-gray-600 mt-1">
-              Showing {filteredActivities.length} of {allActivities.length} activities
+              Duke shfaqur {filteredActivities.length} nga {allActivities.length} aktivitete
             </p>
           </div>
           <button
@@ -126,7 +126,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search activities..."
+                placeholder="Kërko aktivitete..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -140,11 +140,11 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
-                <option value="all">All Types</option>
-                <option value="consumption">Consumption</option>
-                <option value="refill">Refill</option>
-                <option value="maintenance">Maintenance</option>
-                <option value="other">Other</option>
+                <option value="all">Të Gjitha Llojet</option>
+                <option value="consumption">Konsum</option>
+                <option value="refill">Plotësim</option>
+                <option value="maintenance">Mirëmbajtje</option>
+                <option value="other">Tjetër</option>
               </select>
             </div>
 
@@ -155,7 +155,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
                 onChange={(e) => setSelectedPlace(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
-                <option value="all">All Places</option>
+                <option value="all">Të Gjitha Vendet</option>
                 {uniquePlaces.map(place => (
                   <option key={place} value={place}>{place}</option>
                 ))}
@@ -172,7 +172,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
               }}
               className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-colors"
             >
-              Clear Filters
+              Pastro Filtrot
             </button>
           </div>
         </div>
@@ -182,8 +182,8 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
           {paginatedActivities.length === 0 ? (
             <div className="p-8 text-center">
               <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
-              <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Nuk u gjetën aktivitete</h3>
+              <p className="text-gray-600">Provo të përshtatësh kriteret e kërkimit ose filtrave.</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-200">
@@ -213,7 +213,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
                             <span>{formatDate(activity.date)}</span>
                           </div>
                           {activity.operator && (
-                            <span>Operator: {activity.operator}</span>
+                            <span>Operatori: {activity.operator}</span>
                           )}
                         </div>
                         {activity.description && (
@@ -236,7 +236,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
           <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing {startIndex + 1} to {Math.min(endIndex, filteredActivities.length)} of {filteredActivities.length} results
+                Duke shfaqur {startIndex + 1} deri {Math.min(endIndex, filteredActivities.length)} nga {filteredActivities.length} rezultate
               </div>
               <div className="flex items-center space-x-2">
                 <button
@@ -247,7 +247,7 @@ const RecentActivityModal: React.FC<RecentActivityModalProps> = ({
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <span className="px-3 py-1 text-sm font-medium text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  Faqja {currentPage} nga {totalPages}
                 </span>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}

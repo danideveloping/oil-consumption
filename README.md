@@ -103,7 +103,7 @@ A comprehensive web application for managing oil tanks, machinery, and consumpti
    npm run create-superadmin
    cd ..
    ```
-   Follow the prompts to enter username, email, and password for the superadmin account.
+   Follow the prompts to enter username and password for the superadmin account.
 
 6. **Start the Application**
    ```bash
@@ -131,7 +131,7 @@ A comprehensive web application for managing oil tanks, machinery, and consumpti
 1. **Register a New Account**
    - Navigate to http://localhost:3000
    - Click "Sign up" to create a new account
-   - Fill in username, email, and password
+   - Fill in username and password
 
 2. **Add Places**
    - Go to "Places" in the sidebar
@@ -179,7 +179,7 @@ A comprehensive web application for managing oil tanks, machinery, and consumpti
 ## Database Schema
 
 ### Users
-- id (SERIAL PRIMARY KEY), username (VARCHAR), email (VARCHAR), password (VARCHAR), role (VARCHAR), created_at (TIMESTAMP)
+- id (SERIAL PRIMARY KEY), username (VARCHAR), password (VARCHAR), role (VARCHAR), created_at (TIMESTAMP)
 
 ### Places
 - id (SERIAL PRIMARY KEY), name (VARCHAR), location (VARCHAR), description (TEXT), created_at (TIMESTAMP)

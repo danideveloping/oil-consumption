@@ -61,15 +61,15 @@ const MachineryPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Machinery Management</h1>
-          <p className="text-sm sm:text-base text-gray-600">Manage your industrial equipment and machinery</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Menaxhimi i Makinerisë</h1>
+          <p className="text-sm sm:text-base text-gray-600">Menaxho pajisjet dhe makinerinë industriale</p>
         </div>
         <button 
           onClick={() => setIsAddModalOpen(true)}
           className="btn btn-primary flex items-center justify-center w-full sm:w-auto"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add Machinery
+          Shto Makineri
         </button>
       </div>
 
@@ -81,7 +81,7 @@ const MachineryPage: React.FC = () => {
               <Settings className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Machinery</p>
+              <p className="text-sm font-medium text-gray-600">Makineri Totale</p>
               <p className="text-2xl font-bold text-gray-900">{machinery.length}</p>
             </div>
           </div>
@@ -93,7 +93,7 @@ const MachineryPage: React.FC = () => {
               <Settings className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Active</p>
+              <p className="text-sm font-medium text-gray-600">Aktive</p>
               <p className="text-2xl font-bold text-gray-900">{machinery.length}</p>
             </div>
           </div>
@@ -105,7 +105,7 @@ const MachineryPage: React.FC = () => {
               <Settings className="h-6 w-6 text-yellow-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Capacity</p>
+              <p className="text-sm font-medium text-gray-600">Kapaciteti Total</p>
               <p className="text-2xl font-bold text-gray-900">
                 {machinery.reduce((sum, m) => {
                   const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity || '0') || 0;
@@ -120,11 +120,11 @@ const MachineryPage: React.FC = () => {
       {/* Machinery Table */}
       <div className="card">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">All Machinery</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Të Gjitha Makineritë</h2>
           <div className="flex space-x-2">
             <input
               type="text"
-              placeholder="Search machinery..."
+              placeholder="Kërko makineri..."
               className="input w-full sm:w-64"
             />
           </div>
@@ -135,12 +135,12 @@ const MachineryPage: React.FC = () => {
             <table className="table min-w-full">
               <thead>
                 <tr>
-                  <th className="text-xs sm:text-sm">Name</th>
-                  <th className="text-xs sm:text-sm hidden sm:table-cell">Type</th>
-                  <th className="text-xs sm:text-sm">Location</th>
-                  <th className="text-xs sm:text-sm hidden md:table-cell">Capacity</th>
-                  <th className="text-xs sm:text-sm hidden lg:table-cell">Description</th>
-                  <th className="text-xs sm:text-sm">Actions</th>
+                  <th className="text-xs sm:text-sm">Emri</th>
+                  <th className="text-xs sm:text-sm hidden sm:table-cell">Tipi</th>
+                  <th className="text-xs sm:text-sm">Vendndodhja</th>
+                  <th className="text-xs sm:text-sm hidden md:table-cell">Kapaciteti</th>
+                  <th className="text-xs sm:text-sm hidden lg:table-cell">Përshkrimi</th>
+                  <th className="text-xs sm:text-sm">Veprimet</th>
                 </tr>
               </thead>
               <tbody>
