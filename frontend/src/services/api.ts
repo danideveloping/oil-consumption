@@ -7,16 +7,15 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10 second timeout
 });
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    console.log('🔑 Token from localStorage:', token ? 'Present' : 'Missing');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('📤 Request headers:', config.headers);
     }
     return config;
   },
@@ -124,17 +123,11 @@ export const authAPI = {
 
 // Places API
 export const placesAPI = {
-  getAll: () => {
-    console.log('🔍 Fetching all places...');
-    return api.get<Place[]>('/places');
-  },
+  getAll: () => api.get<Place[]>('/places'),
   
   getById: (id: number) => api.get<Place>(`/places/${id}`),
   
-  create: (data: Omit<Place, 'id' | 'created_at'>) => {
-    console.log('➕ Creating place with data:', data);
-    return api.post<Place>('/places', data);
-  },
+  create: (data: Omit<Place, 'id' | 'created_at'>) => api.post<Place>('/places', data),
   
   update: (id: number, data: Partial<Omit<Place, 'id' | 'created_at'>>) =>
     api.put<Place>(`/places/${id}`, data),
