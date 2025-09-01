@@ -49,7 +49,7 @@ router.post('/', [
   authenticateToken,
   body('name').notEmpty().withMessage('Machinery name is required'),
   body('type').optional(),
-  body('place_id').isInt({ min: 1 }).withMessage('Place ID is required and must be a valid integer'),
+  body('place_id').notEmpty().withMessage('Place ID is required').isInt({ min: 1 }).withMessage('Place ID must be a valid integer'),
   body('capacity').optional().isFloat({ min: 0 }).withMessage('Capacity must be a positive number')
 ], async (req, res) => {
   try {
