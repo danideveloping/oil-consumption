@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, MapPin, Settings } from 'lucide-react';
 import AddPlaceModal from '../components/AddPlaceModal';
-import { placesAPI, Place, PaginatedResponse } from '../services/api';
+import { placesAPI, Place } from '../services/api';
 // import toast from 'react-hot-toast';
 
 const PlacesPage: React.FC = () => {
   const [places, setPlaces] = useState<Place[]>([]);
-  const [pagination, setPagination] = useState({
-    current_page: 1,
-    total_pages: 1,
-    total_records: 0,
-    per_page: 20
-  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

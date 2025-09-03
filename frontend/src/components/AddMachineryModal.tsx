@@ -41,14 +41,7 @@ const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, 
     try {
       setLoadingPlaces(true);
       const response = await placesAPI.getAll();
-      // Handle paginated response
-      if (response.data && response.data.data) {
-        setPlaces(response.data.data || []);
-      } else if (Array.isArray(response.data)) {
-        setPlaces(response.data);
-      } else {
-        setPlaces([]);
-      }
+      setPlaces(response.data || []);
     } catch (error) {
       console.error('Error fetching places:', error);
       toast.error('Dështoi ngarkimi i vendeve');

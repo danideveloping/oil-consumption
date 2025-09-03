@@ -77,25 +77,11 @@ const Dashboard: React.FC = () => {
       console.log('New machinery data:', machineryResponse.data);
       console.log('New machinery count:', machineryResponse.data?.length || 0);
       
-      // Handle paginated machinery response
-      if (machineryResponse.data && machineryResponse.data.data) {
-        setMachinery(machineryResponse.data.data || []);
-      } else if (Array.isArray(machineryResponse.data)) {
-        setMachinery(machineryResponse.data);
-      } else {
-        setMachinery([]);
-      }
+      setMachinery(machineryResponse.data || []);
       
       // Reload places data
       const placesResponse = await placesAPI.getAll();
-      // Handle paginated places response
-      if (placesResponse.data && placesResponse.data.data) {
-        setPlaces(placesResponse.data.data || []);
-      } else if (Array.isArray(placesResponse.data)) {
-        setPlaces(placesResponse.data);
-      } else {
-        setPlaces([]);
-      }
+      setPlaces(placesResponse.data || []);
       
       console.log('Dashboard data refreshed successfully');
     } catch (error) {

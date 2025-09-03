@@ -28,17 +28,8 @@ const MachineryPage: React.FC = () => {
       const response = await machineryAPI.getAll();
       console.log('📦 Machinery response:', response);
       
-      // Handle paginated response
-      if (response.data && response.data.data) {
-        console.log('✅ Setting paginated machinery data:', response.data.data);
-        setMachinery(response.data.data || []);
-      } else if (Array.isArray(response.data)) {
-        console.log('✅ Setting array machinery data:', response.data);
-        setMachinery(response.data);
-      } else {
-        console.log('⚠️ Unexpected response format, setting empty array');
-        setMachinery([]);
-      }
+      console.log('✅ Setting machinery data:', response.data);
+      setMachinery(response.data || []);
     } catch (error) {
       console.error('❌ Error loading machinery:', error);
       setMachinery([]); // Empty array if no data
