@@ -48,27 +48,23 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// Handle React Router - serve index.html for all non-API routes
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  }
-});
-
-// Routes
+// API Routes - MUST come BEFORE catch-all route!
 app.use('/api/auth', authRoutes);
 app.use('/api/machinery', machineryRoutes);
 app.use('/api/data', dataRoutes);
 app.use('/api/places', placesRoutes);
 
-// Health check endpoint for Render
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Tank Management API is running' });
+// Handle React Router - serve index.html for all non-API routes
+// THIS MUST BE LAST! After all API routes!
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  }
 });
 
 // Error handling middleware

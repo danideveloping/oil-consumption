@@ -41,10 +41,18 @@ const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, 
     try {
       setLoadingPlaces(true);
       const response = await placesAPI.getAll();
-      setPlaces(response.data || []);
+      // Handle paginated response
+      if (response.data && response.data.data) {
+        setPlaces(response.data.data || []);
+      } else if (Array.isArray(response.data)) {
+        setPlaces(response.data);
+      } else {
+        setPlaces([]);
+      }
     } catch (error) {
       console.error('Error fetching places:', error);
       toast.error('Dështoi ngarkimi i vendeve');
+      setPlaces([]);
     } finally {
       setLoadingPlaces(false);
     }
@@ -52,6 +60,12 @@ const AddMachineryModal: React.FC<AddMachineryModalProps> = ({ isOpen, onClose, 
 
   const onSubmit = async (data: MachineryFormData) => {
     try {
+      // Validate place_id is selected
+      if (!data.place_id || Number(data.place_id) <= 0) {
+        toast.error('Ju lutem zgjidhni një vendndodhje');
+        return;
+      }
+
       // Clean up the data - remove empty strings and convert to proper types
       const cleanData = {
         name: data.name,

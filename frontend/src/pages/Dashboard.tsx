@@ -77,11 +77,25 @@ const Dashboard: React.FC = () => {
       console.log('New machinery data:', machineryResponse.data);
       console.log('New machinery count:', machineryResponse.data?.length || 0);
       
-      setMachinery(machineryResponse.data || []);
+      // Handle paginated machinery response
+      if (machineryResponse.data && machineryResponse.data.data) {
+        setMachinery(machineryResponse.data.data || []);
+      } else if (Array.isArray(machineryResponse.data)) {
+        setMachinery(machineryResponse.data);
+      } else {
+        setMachinery([]);
+      }
       
       // Reload places data
       const placesResponse = await placesAPI.getAll();
-      setPlaces(placesResponse.data || []);
+      // Handle paginated places response
+      if (placesResponse.data && placesResponse.data.data) {
+        setPlaces(placesResponse.data.data || []);
+      } else if (Array.isArray(placesResponse.data)) {
+        setPlaces(placesResponse.data);
+      } else {
+        setPlaces([]);
+      }
       
       console.log('Dashboard data refreshed successfully');
     } catch (error) {
@@ -154,13 +168,13 @@ const Dashboard: React.FC = () => {
 
   // Debug: Monitor machinery state changes
   useEffect(() => {
-    console.log('Machinery state updated:', machinery.length, 'items');
+    console.log('Machinery state updated:', Array.isArray(machinery) ? machinery.length : 0, 'items');
   }, [machinery]);
 
   // Calculate real stats from API data
   const calculateStats = () => {
-    const totalMachinery = machinery.length;
-    const activePlaces = places.length;
+    const totalMachinery = Array.isArray(machinery) ? machinery.length : 0;
+    const activePlaces = Array.isArray(places) ? places.length : 0;
     
     // Calculate monthly consumption (last 30 days)
     const monthlyConsumption = oilData
@@ -171,10 +185,10 @@ const Dashboard: React.FC = () => {
       }, 0);
     
     // Calculate total capacity
-    const totalCapacity = machinery.reduce((sum, m) => {
+    const totalCapacity = Array.isArray(machinery) ? machinery.reduce((sum, m) => {
       const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity || '0') || 0;
       return sum + capacity;
-    }, 0);
+    }, 0) : 0;
     
     // Calculate efficiency (consumption vs capacity ratio)
     const efficiency = totalCapacity > 0 ? Math.round((monthlyConsumption / totalCapacity) * 100) : 0;
@@ -182,10 +196,10 @@ const Dashboard: React.FC = () => {
     // Get this month's new machinery count
     const thisMonth = new Date().getMonth();
     const thisYear = new Date().getFullYear();
-    const newMachineryThisMonth = machinery.filter(m => {
+    const newMachineryThisMonth = Array.isArray(machinery) ? machinery.filter(m => {
       const createdDate = new Date(m.created_at);
       return createdDate.getMonth() === thisMonth && createdDate.getFullYear() === thisYear;
-    }).length;
+    }).length : 0;
     
     const allStats = [
       {

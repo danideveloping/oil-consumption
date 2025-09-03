@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// PostgreSQL connection configuration
+// PostgreSQL connection configuration with optimized pool settings
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   // Fallback to individual properties if DATABASE_URL is not provided
@@ -13,7 +13,16 @@ const pool = new Pool({
   // Force SSL for Render database
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  // Pool optimization settings
+  max: 10, // Maximum number of clients in the pool
+  min: 2,  // Minimum number of clients in the pool
+  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 5000, // Connection timeout
+  query_timeout: 30000, // Query timeout
+  statement_timeout: 30000, // Statement timeout
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10000
 });
 
 class Database {
@@ -81,6 +90,32 @@ class Database {
           // Ignore race-condition errors when tables/sequences already exist
           // 42P07: duplicate_table, 23505: unique_violation (e.g., sequence name)
           if (error && (error.code === '42P07' || error.code === '23505')) {
+            continue;
+          }
+          throw error;
+        }
+      }
+
+      // Create indexes to optimize frequent queries
+      const indexes = [
+        // Places
+        `CREATE INDEX IF NOT EXISTS idx_places_created_at ON places (created_at DESC)`,
+        `CREATE INDEX IF NOT EXISTS idx_places_name ON places (name)`,
+        // Machinery
+        `CREATE INDEX IF NOT EXISTS idx_machinery_place_id ON machinery (place_id)`,
+        `CREATE INDEX IF NOT EXISTS idx_machinery_created_at ON machinery (created_at DESC)`,
+        // Oil data
+        `CREATE INDEX IF NOT EXISTS idx_oil_data_machinery_id ON oil_data (machinery_id)`,
+        `CREATE INDEX IF NOT EXISTS idx_oil_data_date ON oil_data (date DESC)`,
+        `CREATE INDEX IF NOT EXISTS idx_oil_data_created_at ON oil_data (created_at DESC)`
+      ];
+
+      for (const idx of indexes) {
+        try {
+          await this.pool.query(idx);
+        } catch (error) {
+          // 42710: duplicate_object (should not happen due to IF NOT EXISTS, but be safe)
+          if (error && error.code === '42710') {
             continue;
           }
           throw error;

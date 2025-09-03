@@ -14,7 +14,6 @@ router.get('/', authenticateToken, async (req, res) => {
       LEFT JOIN places p ON m.place_id = p.id 
       ORDER BY m.created_at DESC
     `);
-    
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching machinery:', error);

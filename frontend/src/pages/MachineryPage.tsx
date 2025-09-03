@@ -23,11 +23,24 @@ const MachineryPage: React.FC = () => {
 
   const loadMachinery = async () => {
     try {
+      console.log('🔄 Loading machinery...');
       // setIsLoading(true);
       const response = await machineryAPI.getAll();
-      setMachinery(response.data || []);
+      console.log('📦 Machinery response:', response);
+      
+      // Handle paginated response
+      if (response.data && response.data.data) {
+        console.log('✅ Setting paginated machinery data:', response.data.data);
+        setMachinery(response.data.data || []);
+      } else if (Array.isArray(response.data)) {
+        console.log('✅ Setting array machinery data:', response.data);
+        setMachinery(response.data);
+      } else {
+        console.log('⚠️ Unexpected response format, setting empty array');
+        setMachinery([]);
+      }
     } catch (error) {
-      console.error('Error loading machinery:', error);
+      console.error('❌ Error loading machinery:', error);
       setMachinery([]); // Empty array if no data
     } finally {
       // setIsLoading(false);
@@ -107,10 +120,10 @@ const MachineryPage: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Kapaciteti Total</p>
               <p className="text-2xl font-bold text-gray-900">
-                {machinery.reduce((sum, m) => {
+                {Array.isArray(machinery) ? machinery.reduce((sum, m) => {
                   const capacity = typeof m.capacity === 'number' ? m.capacity : parseFloat(m.capacity || '0') || 0;
                   return sum + capacity;
-                }, 0).toFixed(2)}L
+                }, 0).toFixed(2) : '0.00'}L
               </p>
             </div>
           </div>

@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { config } from '../config/production';
+
+// Use production server for all environments
+const apiBaseUrl = 'https://oil-consumption-kg14.onrender.com';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: `${config.apiBaseUrl}/api`,
+  baseURL: `${apiBaseUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 30000, // Increased timeout to 30 seconds
 });
 
 // Add request interceptor to include auth token
@@ -123,7 +125,29 @@ export const authAPI = {
 
 // Places API
 export const placesAPI = {
-  getAll: () => api.get<Place[]>('/places'),
+  getAll: async () => {
+    console.log('🔍 Fetching places...');
+    try {
+      const response = await api.get<Place[]>('/places');
+      console.log('✅ Places fetched successfully:', response.data);
+      return response;
+    } catch (error: any) {
+      console.error('❌ Error fetching places:', error);
+      // If it's a timeout error, try one more time
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        console.log('🔄 Retrying places fetch due to timeout...');
+        try {
+          const retryResponse = await api.get<Place[]>('/places');
+          console.log('✅ Places fetched successfully on retry:', retryResponse.data);
+          return retryResponse;
+        } catch (retryError) {
+          console.error('❌ Retry failed:', retryError);
+          throw retryError;
+        }
+      }
+      throw error;
+    }
+  },
   
   getById: (id: number) => api.get<Place>(`/places/${id}`),
   
